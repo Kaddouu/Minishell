@@ -6,11 +6,11 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:11 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/27 17:28:54 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/28 15:59:09 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 // t_command *parser(t_token *tokens) {
 //     t_command *cmds = NULL;
@@ -153,7 +153,7 @@ int	handle_input(t_shell *shell, char *line)
 		return (0); // Erreur de parsing
 	}
 	// Exécution des commandes
-	execute_commands(shell);
+	// execute_commands(shell);
 	// Nettoyage
 	free_token(shell->tokens);
 	shell->tokens = NULL;

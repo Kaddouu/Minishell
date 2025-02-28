@@ -6,11 +6,11 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:34:40 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/27 19:16:46 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/28 15:59:18 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <assert.h>
 
 // Test de la fonction lexer
@@ -545,13 +545,13 @@ void	test_ft_strjoin_char_free(void)
 }
 
 // Test de la fonction execute_commands
-void	test_execute_commands(void)
-{
-	t_shell	shell;
+// void	test_execute_commands(void)
+// {
+// 	t_shell	shell;
 
-	shell.tokens = NULL;      // Remplissez avec des tokens si nécessaire
-	execute_commands(&shell); // Vérifiez que cela ne plante pas
-}
+// 	shell.tokens = NULL;      // Remplissez avec des tokens si nécessaire
+// 	execute_commands(&shell); // Vérifiez que cela ne plante pas
+// }
 
 int	main(void)
 {

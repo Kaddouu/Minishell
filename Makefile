@@ -6,7 +6,7 @@
 #    By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/02/27 14:44:30 by ysaadaou         ###   ########.fr        #
+#    Updated: 2025/02/28 15:39:03 by ysaadaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,16 +16,17 @@ SRCS_DIR = ./srcs
 
 BUILTINS_DIR = ./builtins/
 
+PARSING_DIR = ./parsing/
+
 SRCS = minishell.c \
 	minishell_init.c \
 	free_functions.c \
-	parsing.c \
-	command_functions.c \
-	env_functions.c \
-	utils_functions.c \
-	lexer.c \
-	lexer_utils.c \
-	test_functions.c \
+	$(PARSING_DIR)parsing.c \
+	$(PARSING_DIR)command_functions.c \
+	$(PARSING_DIR)env_functions.c \
+	$(PARSING_DIR)lexer.c \
+	$(PARSING_DIR)lexer_utils.c \
+	$(PARSING_DIR)test_functions.c \
 	# $(BUILTINS_DIR)builtins_utils.c \
 	# $(BUILTINS_DIR)ft_cd.c \
 	# $(BUILTINS_DIR)ft_echo.c \

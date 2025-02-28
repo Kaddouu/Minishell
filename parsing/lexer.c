@@ -6,11 +6,11 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:30:13 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/27 14:47:48 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/28 15:39:55 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_token	*lexer(char *input)
 {

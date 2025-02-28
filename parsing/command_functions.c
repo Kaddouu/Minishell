@@ -6,11 +6,11 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:28:36 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/27 16:01:33 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/28 15:42:30 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 t_command	*create_command(void)
 {
