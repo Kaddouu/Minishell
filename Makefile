@@ -6,7 +6,7 @@
 #    By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/02/28 15:39:03 by ysaadaou         ###   ########.fr        #
+#    Updated: 2025/02/28 16:36:37 by ysaadaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,28 +14,27 @@ NAME = minishell
 
 SRCS_DIR = ./srcs
 
-BUILTINS_DIR = ./builtins/
+BUILTINS_FILES = ./builtins/builtins_utils.c \
+	./builtins/ft_cd.c \
+	./builtins/ft_echo.c \
+	./builtins/ft_env.c \
+	./builtins/ft_exit.c \
+	./builtins/ft_export.c \
+	./builtins/ft_pwd.c \
+	./builtins/ft_unset.c \
 
-PARSING_DIR = ./parsing/
+PARSING_FILES = ./parsing/parsing.c \
+	./parsing/command_functions.c \
+	./parsing/env_functions.c \
+	./parsing/lexer.c \
+	./parsing/lexer_utils.c \
+	./parsing/test_functions.c \
 
 SRCS = minishell.c \
 	minishell_init.c \
 	free_functions.c \
-	$(PARSING_DIR)parsing.c \
-	$(PARSING_DIR)command_functions.c \
-	$(PARSING_DIR)env_functions.c \
-	$(PARSING_DIR)lexer.c \
-	$(PARSING_DIR)lexer_utils.c \
-	$(PARSING_DIR)test_functions.c \
-	# $(BUILTINS_DIR)builtins_utils.c \
-	# $(BUILTINS_DIR)ft_cd.c \
-	# $(BUILTINS_DIR)ft_echo.c \
-	# $(BUILTINS_DIR)ft_env.c \
-	# $(BUILTINS_DIR)ft_exit.c \
-	# $(BUILTINS_DIR)ft_export.c \
-	# $(BUILTINS_DIR)ft_pwd.c \
-	# $(BUILTINS_DIR)ft_unset.c \
-	# $(BUILTINS_DIR)main_builtins.c \
+	$(PARSING_FILES) \
+	# $(BUILTINS_FILES) \
 
 HEAD = minishell.h
 

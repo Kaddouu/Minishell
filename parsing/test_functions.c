@@ -6,7 +6,7 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:34:40 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/28 15:59:18 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/28 17:45:54 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ static int count_tokens(t_token *tokens)
 void test_lexer(void)
 {
     t_shell shell;
-    int result;
+	(void)check_token;
+	// (void)count_tokens;
 
     printf("Début des tests du lexer...\n");
     shell.env = NULL; // Initialise l'environnement (ajustez si nécessaire)
@@ -69,113 +70,110 @@ void test_lexer(void)
     // Test 1 : Commande simple
     {
         char *line = "echo";
-        result = handle_input(&shell, line);
-        assert(result == 0 && "Erreur dans le traitement de 'echo'");
-        assert(count_tokens(shell.tokens) == 1);
-        check_token(shell.tokens, WORD, "echo");
-        free_token(shell.tokens);
-        free_command(shell.cmds);
+        t_token *tokens = lexer(line);
+        assert(tokens != NULL && "Lexer a retourné NULL pour 'echo'");
+        assert(count_tokens(tokens) == 1 && "Nombre de tokens incorrect");
+        assert(tokens->type == WORD && "Type de token incorrect");
+        assert(ft_strcmp(tokens->content, "echo") == 0 && "Contenu du token incorrect");
+        free_token(tokens);
         printf("Test 1 (Commande simple) : OK\n");
     }
 
     // Test 2 : Commande avec arguments et espaces multiples
     {
         char *line = "echo   hello   world";
-        result = handle_input(&shell, line);
-        assert(result == 0 && "Erreur dans le traitement de 'echo hello world'");
-        assert(count_tokens(shell.tokens) == 3);
-        check_token(shell.tokens, WORD, "echo");
-        check_token(shell.tokens->next, WORD, "hello");
-        check_token(shell.tokens->next->next, WORD, "world");
-        free_token(shell.tokens);
-        free_command(shell.cmds);
+        t_token *tokens = lexer(line);
+        assert(tokens != NULL);
+        assert(count_tokens(tokens) == 3);
+        assert(ft_strcmp(tokens->content, "echo") == 0);
+        assert(tokens->type == WORD);
+        assert(ft_strcmp(tokens->next->content, "hello") == 0);
+        assert(tokens->next->type == WORD);
+        assert(ft_strcmp(tokens->next->next->content, "world") == 0);
+        assert(tokens->next->next->type == WORD);
+        free_token(tokens);
         printf("Test 2 (Arguments avec espaces) : OK\n");
     }
 
     // Test 3 : Guillemets simples
     {
         char *line = "echo 'hello world'";
-        result = handle_input(&shell, line);
-        assert(result == 0 && "Erreur dans le traitement des guillemets simples");
-        assert(count_tokens(shell.tokens) == 2);
-        check_token(shell.tokens, WORD, "echo");
-        check_token(shell.tokens->next, WORD, "hello world");
-        free_token(shell.tokens);
-        free_command(shell.cmds);
+        t_token *tokens = lexer(line);
+        assert(tokens != NULL && "Lexer a retourné NULL pour 'echo 'hello world''");
+        assert(count_tokens(tokens) == 2 && "Nombre de tokens incorrect");
+        assert(tokens->type == WORD && "Type du premier token incorrect");
+        assert(ft_strcmp(tokens->content, "echo") == 0 && "Contenu du premier token incorrect");
+        assert(tokens->next->type == WORD && "Type du deuxième token incorrect");
+        assert(ft_strcmp(tokens->next->content, "hello world") == 0 && "Contenu du deuxième token incorrect");
+        free_token(tokens);
         printf("Test 3 (Guillemets simples) : OK\n");
     }
 
-    // Test 4 : Redirection complexe (votre exemple initial)
+    // Test 4 : Redirection complexe
     {
         char *line = "awk '{print $9}' < | >> > | << | file1 | wc -c > file2";
-        result = handle_input(&shell, line);
-        assert(result == 0 && "Erreur dans le traitement de la redirection complexe");
-        t_token *current = shell.tokens;
-        assert(count_tokens(shell.tokens) == 14);
-        check_token(current, WORD, "awk"); current = current->next;
-        check_token(current, WORD, "{print $9}"); current = current->next;
-        check_token(current, REDIR_IN, "<"); current = current->next;
-        check_token(current, PIPE, "|"); current = current->next;
-        check_token(current, APPEND, ">>"); current = current->next;
-        check_token(current, REDIR_OUT, ">"); current = current->next;
-        check_token(current, PIPE, "|"); current = current->next;
-        check_token(current, HEREDOC, "<<"); current = current->next;
-        check_token(current, PIPE, "|"); current = current->next;
-        check_token(current, WORD, "file1"); current = current->next;
-        check_token(current, PIPE, "|"); current = current->next;
-        check_token(current, WORD, "wc"); current = current->next;
-        check_token(current, WORD, "-c"); current = current->next;
-        check_token(current, REDIR_OUT, ">"); current = current->next;
-        check_token(current, WORD, "file2");
-        free_token(shell.tokens);
-        free_command(shell.cmds);
+        t_token *tokens = lexer(line);
+        assert(tokens != NULL && "Lexer a retourné NULL pour une redirection complexe");
+        assert(count_tokens(tokens) == 14 && "Nombre de tokens incorrect");
+        t_token *current = tokens;
+        assert(ft_strcmp(current->content, "awk") == 0 && current->type == WORD); current = current->next;
+        assert(ft_strcmp(current->content, "{print $9}") == 0 && current->type == WORD); current = current->next;
+        assert(ft_strcmp(current->content, "<") == 0 && current->type == REDIR_IN); current = current->next;
+        assert(ft_strcmp(current->content, "|") == 0 && current->type == PIPE); current = current->next;
+        assert(ft_strcmp(current->content, ">>") == 0 && current->type == APPEND); current = current->next;
+        assert(ft_strcmp(current->content, ">") == 0 && current->type == REDIR_OUT); current = current->next;
+        assert(ft_strcmp(current->content, "|") == 0 && current->type == PIPE); current = current->next;
+        assert(ft_strcmp(current->content, "<<") == 0 && current->type == HEREDOC); current = current->next;
+        assert(ft_strcmp(current->content, "|") == 0 && current->type == PIPE); current = current->next;
+        assert(ft_strcmp(current->content, "file1") == 0 && current->type == WORD); current = current->next;
+        assert(ft_strcmp(current->content, "|") == 0 && current->type == PIPE); current = current->next;
+        assert(ft_strcmp(current->content, "wc") == 0 && current->type == WORD); current = current->next;
+        assert(ft_strcmp(current->content, "-c") == 0 && current->type == WORD); current = current->next;
+        assert(ft_strcmp(current->content, ">") == 0 && current->type == REDIR_OUT); current = current->next;
+        assert(ft_strcmp(current->content, "file2") == 0 && current->type == WORD);
+        free_token(tokens);
         printf("Test 4 (Redirection complexe) : OK\n");
     }
 
     // Test 5 : Pipes multiples
     {
         char *line = "echo hello | grep e | wc -l";
-        result = handle_input(&shell, line);
-        assert(result == 0 && "Erreur dans le traitement des pipes multiples");
-        assert(count_tokens(shell.tokens) == 7);
-        t_token *current = shell.tokens;
-        check_token(current, WORD, "echo"); current = current->next;
-        check_token(current, WORD, "hello"); current = current->next;
-        check_token(current, PIPE, "|"); current = current->next;
-        check_token(current, WORD, "grep"); current = current->next;
-        check_token(current, WORD, "e"); current = current->next;
-        check_token(current, PIPE, "|"); current = current->next;
-        check_token(current, WORD, "wc"); current = current->next;
-        check_token(current, WORD, "-l");
-        free_token(shell.tokens);
-        free_command(shell.cmds);
+        t_token *tokens = lexer(line);
+        assert(tokens != NULL && "Lexer a retourné NULL pour des pipes multiples");
+        assert(count_tokens(tokens) == 7 && "Nombre de tokens incorrect");
+        t_token *current = tokens;
+        assert(ft_strcmp(current->content, "echo") == 0 && current->type == WORD); current = current->next;
+        assert(ft_strcmp(current->content, "hello") == 0 && current->type == WORD); current = current->next;
+        assert(ft_strcmp(current->content, "|") == 0 && current->type == PIPE); current = current->next;
+        assert(ft_strcmp(current->content, "grep") == 0 && current->type == WORD); current = current->next;
+        assert(ft_strcmp(current->content, "e") == 0 && current->type == WORD); current = current->next;
+        assert(ft_strcmp(current->content, "|") == 0 && current->type == PIPE); current = current->next;
+        assert(ft_strcmp(current->content, "wc") == 0 && current->type == WORD); current = current->next;
+        assert(ft_strcmp(current->content, "-l") == 0 && current->type == WORD);
+        free_token(tokens);
         printf("Test 5 (Pipes multiples) : OK\n");
     }
 
     // Test 6 : Variables d'environnement
     {
         char *line = "echo $HOME $PATH";
-        result = handle_input(&shell, line);
-        assert(result == 0 && "Erreur dans le traitement des variables d'environnement");
-        assert(count_tokens(shell.tokens) == 3);
-        check_token(shell.tokens, WORD, "echo");
-        check_token(shell.tokens->next, ENV, "$HOME"); // ou WORD si expansé
-        check_token(shell.tokens->next->next, ENV, "$PATH");
-        free_token(shell.tokens);
-        free_command(shell.cmds);
+        t_token *tokens = lexer(line);
+        assert(tokens != NULL && "Lexer a retourné NULL pour des variables d'environnement");
+        assert(count_tokens(tokens) == 3 && "Nombre de tokens incorrect");
+        assert(ft_strcmp(tokens->content, "echo") == 0 && tokens->type == WORD);
+        assert(ft_strcmp(tokens->next->content, "$HOME") == 0 && tokens->next->type == ENV);
+        assert(ft_strcmp(tokens->next->next->content, "$PATH") == 0 && tokens->next->next->type == ENV);
+        free_token(tokens);
         printf("Test 6 (Variables d'environnement) : OK\n");
     }
 
+	(void)count_tokens;
     // Test 7 : Ligne vide
     {
-		(void)check_token;
-		(void)count_tokens;
         char *line = "   ";
-        result = handle_input(&shell, line);
-        assert(result == 0 && "Erreur dans le traitement de la ligne vide");
-        assert(shell.tokens == NULL && "Tokens inattendus pour une ligne vide");
-        free_token(shell.tokens);
-        free_command(shell.cmds);
+        t_token *tokens = lexer(line);
+        assert(tokens == NULL && "Tokens inattendus pour une ligne vide");
+        free_token(tokens);
         printf("Test 7 (Ligne vide) : OK\n");
     }
 
