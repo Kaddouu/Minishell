@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:05 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/04 15:25:41 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:44:27 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*get_home_dir(char **env)
 int	ft_cd(char **args, char ***env)
 {
 	char	*path;
-	char	cwd[1024];
+	char	*cwd;
 
 	if (!args[1])
 	{
