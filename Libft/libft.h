@@ -6,7 +6,7 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 13:53:18 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/05 17:20:09 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:27:17 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin_free(char *s1, char *s2);
+char	*ft_strjoin_char_free(char *s, char c);
 char	*ft_strjoin_three(char *s1, char *s2, char *s3);
 size_t	ft_strlcat(char *dst, const char *src, size_t n);
 size_t	ft_strlcpy(char *dst, char *src, size_t n);

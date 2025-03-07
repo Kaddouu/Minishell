@@ -6,7 +6,7 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 13:52:16 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 15:27:38 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:12:16 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,16 @@ int	execute_builtin(t_shell *shell, t_command *cmd, t_builtin *builtins)
 	while (builtins[i].name)
 	{
 		if (ft_strcmp(cmd->args[0], builtins[i].name) == 0)
-			return (builtins[i].func(shell, cmd->args));
+		{
+			if (ft_strcmp(cmd->args[0], "export") == 0)
+    			return (ft_export(cmd->args, shell));
+			else if (ft_strcmp(cmd->args[0], "unset") == 0)
+   				 return (ft_unset(cmd->args, shell));
+			else if (ft_strcmp(cmd->args[0], "env") == 0)
+				return (builtins[i].func(env_to_array(shell->env), shell));
+			else
+				return (builtins[i].func(cmd->args, shell));
+		}
 		i++;
 	}
 	return (-1);
@@ -40,7 +49,8 @@ void	execute_external(t_shell *shell, t_command *cmd, t_env *env)
 	}
 	if (pid == 0)
 	{ // Processus enfant
-		handle_redirection(cmd); // Gérer les redirections avant d'executer la commande
+		handle_redirection(cmd);
+		// Gérer les redirections avant d'executer la commande
 		path = find_path(cmd->args[0], env);
 		if (!path || access(path, X_OK) != 0)
 		{
@@ -175,11 +185,11 @@ void	execute_commands(t_shell *shell, t_builtin *builtins)
 	cmd = shell->cmds;
 	if (!cmd)
 		return ;
-	if (cmd->next) // On verifie si y'a au moins une pipe pour executer en la prenant en compte sinon on execute une commande normale
+	if (cmd->next)
 		execute_pipeline(shell, builtins);
 	else
 	{
-		handle_heredoc(shell, cmd); // Gérer le heredoc avant exécution
+		handle_heredoc(shell, cmd);
 		if (is_builtin(cmd->args[0], builtins))
 			shell->exit_status = execute_builtin(shell, cmd, builtins);
 		else

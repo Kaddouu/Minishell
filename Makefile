@@ -6,7 +6,7 @@
 #    By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/03/07 15:36:31 by ysaadaou         ###   ########.fr        #
+#    Updated: 2025/03/07 16:39:51 by ysaadaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ SRCS = minishell.c \
 	exec_functions.c \
 	exec_utils.c \
 	$(PARSING_FILES) \
-	# $(BUILTINS_FILES) \
+	$(BUILTINS_FILES) \
 
 HEAD = minishell.h
 

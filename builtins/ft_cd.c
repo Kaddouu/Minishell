@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:05 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/05 13:40:10 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:10:06 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_cd(char **args)
+int	ft_cd(char **args, t_shell *shell)
 {
+	(void)shell;
 	char	*path;
 
 	if (!args[1])

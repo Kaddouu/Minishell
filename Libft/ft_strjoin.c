@@ -6,7 +6,7 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:53:47 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/05 17:19:59 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:26:57 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,36 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		newtab[j++] = s2[i++];
 	newtab[j] = '\0';
 	return (newtab);
+}
+
+char	*ft_strjoin_free(char *s1, char *s2)
+{
+	char	*result;
+
+	result = ft_strjoin(s1, s2);
+	free(s1);
+	return (result);
+}
+
+char	*ft_strjoin_char_free(char *s, char c)
+{
+	char	*result;
+	size_t	len;
+
+	if (!s)
+		return (NULL);
+	len = ft_strlen(s);
+	result = (char *)malloc(len + 2);
+	if (!result)
+	{
+		free(s);
+		return (NULL);
+	}
+	ft_strcpy(result, s);
+	result[len] = c;
+	result[len + 1] = '\0';
+	free(s);
+	return (result);
 }
 
 char *ft_strjoin_three(char *s1, char *s2, char *s3)

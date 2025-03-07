@@ -6,7 +6,7 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:37:58 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 15:25:41 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:58:15 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ int	main(int ac, char **av, char **ev)
 	(void)ac;
 	(void)av;
 	setup_signals(); // gestion des signaux
-	shell = init_shell(ev);
+	if (!ev || !ev[0])
+    	shell = init_shell(NULL);
+	else
+   		shell = init_shell(ev);
 	builtins = init_builtins();
 	if (!shell)
 		return (1);
@@ -76,6 +79,7 @@ int	main(int ac, char **av, char **ev)
 		}
 		free(line);
 	}
+	free_builtins(builtins);
 	free_shell(shell);
 	rl_clear_history();
 	return (shell->exit_status);

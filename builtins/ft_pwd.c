@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:32:42 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/04 14:26:04 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:11:00 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int ft_pwd(void)
+int ft_pwd(char **args, t_shell *shell)
 {
+    (void)args;
+    (void)shell;
     char *pwd;
 
     pwd = getcwd(NULL, 0);
