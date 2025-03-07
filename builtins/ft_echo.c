@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/05 13:56:07 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:52:48 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	is_flag_n(char *str)
 	return (0);
 }
 
-int	ft_echo(char **args)
+int ft_echo(char **args)
 {
 	int	i;
 	int	newline;
