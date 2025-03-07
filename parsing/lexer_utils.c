@@ -6,7 +6,7 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:28:15 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/28 15:39:45 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:07:36 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,36 +69,48 @@ void	handle_word(t_token **tokens, t_token **last, char **ptr)
 	add_token(tokens, last, create_token(word, WORD));
 }
 
-void	handle_quotes(t_token **tokens, t_token **last, char **ptr)
+int handle_quotes(t_token **tokens, t_token **last, char **ptr)
 {
-	char	quote;
-	char	*start;
-	char	*content;
+    // Vérification des paramètres d'entrée
+    if (!tokens || !last || !ptr || !*ptr)
+        return 0;
 
-	quote = **ptr;
-	(*ptr)++; // Avancer après le guillemet
-	start = *ptr;
-	// Trouver la fin de la chaîne entre guillemets
-	while (**ptr && **ptr != quote)
-	{
-		// Gérer les variables d'environnement uniquement pour les guillemets doubles
-		if (quote == '"' && **ptr == '$')
-		{
-			handle_env_var(tokens, last, ptr);
-			start = *ptr; // Réinitialiser le début après l'expansion
-		}
-		(*ptr)++;
-	}
-	if (!**ptr) // Erreur: guillemet non fermé
-		return ; // Gérer l'erreur
-	// Extraire le contenu entre guillemets
-	content = ft_substr(start, 0, *ptr - start);
-	if (quote == '"') {
-		// Si c'est un guillemet double, ajouter comme ENV
-		add_token(tokens, last, create_token(content, WORD)); // Vous pouvez changer WORD en ENV si nécessaire
-	} else {
-		// Si c'est un guillemet simple, ajouter comme WORD
-		add_token(tokens, last, create_token(content, WORD));
-	}
-	(*ptr)++; // Avancer après le guillemet fermant
+    char quote = **ptr;
+    (*ptr)++; // Avancer après le guillemet
+    char *start = *ptr;
+
+    // Trouver la fin de la chaîne entre guillemets
+    while (**ptr && **ptr != quote)
+    {
+        if (quote == '"' && **ptr == '$')
+        {
+            handle_env_var(tokens, last, ptr);
+            start = *ptr; // Réinitialiser le début après l'expansion
+        }
+        else
+            (*ptr)++;
+    }
+    if (!**ptr) // Guillemet non fermé
+    {
+        printf("Erreur : guillemet non fermé\n");
+        return 0;
+    }
+
+    // Extraire le contenu entre guillemets
+    char *content = ft_substr(start, 0, *ptr - start);
+    if (!content)
+        return 0; // Échec de l'allocation
+
+    // Créer un nouveau token
+    t_token *new_token = create_token(content, WORD);
+    if (!new_token)
+    {
+        free(content); // Libérer content si create_token échoue
+        return 0;
+    }
+
+    // Ajouter le token à la liste
+    add_token(tokens, last, new_token);
+    (*ptr)++; // Avancer après le guillemet fermant
+    return 1; // Succès
 }

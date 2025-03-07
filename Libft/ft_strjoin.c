@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:53:47 by ysaadaou          #+#    #+#             */
-/*   Updated: 2024/11/12 15:58:22 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:19:59 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,16 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	newtab[j] = '\0';
 	return (newtab);
 }
-/*
-int	main(int ac, char **av)
+
+char *ft_strjoin_three(char *s1, char *s2, char *s3)
 {
-	if (ac < 1)
-		return (0);
-	printf("%s\n", ft_strjoin(av[1], av[2]));
-}*/
+    char *tmp;
+    char *result;
+
+    tmp = ft_strjoin(s1, s2);
+    if (!tmp)
+        return NULL;
+    result = ft_strjoin(tmp, s3);
+    free(tmp);
+    return result;
+}

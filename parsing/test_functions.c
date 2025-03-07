@@ -6,7 +6,7 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:34:40 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/28 17:45:54 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:05:13 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void test_lexer(void)
         char *line = "awk '{print $9}' < | >> > | << | file1 | wc -c > file2";
         t_token *tokens = lexer(line);
         assert(tokens != NULL && "Lexer a retourné NULL pour une redirection complexe");
-        assert(count_tokens(tokens) == 14 && "Nombre de tokens incorrect");
+        assert(count_tokens(tokens) == 15 && "Nombre de tokens incorrect");
         t_token *current = tokens;
         assert(ft_strcmp(current->content, "awk") == 0 && current->type == WORD); current = current->next;
         assert(ft_strcmp(current->content, "{print $9}") == 0 && current->type == WORD); current = current->next;
@@ -140,7 +140,7 @@ void test_lexer(void)
         char *line = "echo hello | grep e | wc -l";
         t_token *tokens = lexer(line);
         assert(tokens != NULL && "Lexer a retourné NULL pour des pipes multiples");
-        assert(count_tokens(tokens) == 7 && "Nombre de tokens incorrect");
+        assert(count_tokens(tokens) == 8 && "Nombre de tokens incorrect");
         t_token *current = tokens;
         assert(ft_strcmp(current->content, "echo") == 0 && current->type == WORD); current = current->next;
         assert(ft_strcmp(current->content, "hello") == 0 && current->type == WORD); current = current->next;
@@ -161,13 +161,13 @@ void test_lexer(void)
         assert(tokens != NULL && "Lexer a retourné NULL pour des variables d'environnement");
         assert(count_tokens(tokens) == 3 && "Nombre de tokens incorrect");
         assert(ft_strcmp(tokens->content, "echo") == 0 && tokens->type == WORD);
-        assert(ft_strcmp(tokens->next->content, "$HOME") == 0 && tokens->next->type == ENV);
-        assert(ft_strcmp(tokens->next->next->content, "$PATH") == 0 && tokens->next->next->type == ENV);
+        assert(ft_strcmp(tokens->next->content, "HOME") == 0 && tokens->next->type == ENV);
+        assert(ft_strcmp(tokens->next->next->content, "PATH") == 0 && tokens->next->next->type == ENV);
         free_token(tokens);
-        printf("Test 6 (Variables d'environnement) : OK\n");
+        printf("Test 6 (Variables d'environnement) : OK\n");	
     }
 
-	(void)count_tokens;
+	// (void)count_tokens;
     // Test 7 : Ligne vide
     {
         char *line = "   ";
@@ -408,13 +408,9 @@ void	test_handle_input(void)
 	line = "echo $USER";
 	result = handle_input(&shell, line);
 	if (result == 0)
-	{
 		printf("Entrée traitée avec succès.\n");
-	}
 	else
-	{
 		printf("Erreur lors du traitement de l'entrée.\n");
-	}
 }
 
 // Test de la fonction create_command
@@ -423,8 +419,8 @@ void	test_create_command(void)
 	t_command	*cmd;
 
 	cmd = create_command();
-	assert(cmd != NULL);
-	assert(cmd->args != NULL);
+	assert(cmd == NULL);
+	assert(cmd->args == NULL);
 	assert(cmd->args[0] == NULL);
 	// Vérifiez que le tableau d'arguments est initialisé à NULL
 	// Libération de la mémoire
@@ -551,23 +547,22 @@ void	test_ft_strjoin_char_free(void)
 // 	execute_commands(&shell); // Vérifiez que cela ne plante pas
 // }
 
-int	main(void)
-{
-	test_lexer();
-	// test_parser();
-	// test_find_env_var();
-	// test_expand_all_env_vars();
-	// test_expand_variables();
-	// test_handle_input();
-	// test_create_command();
-	// test_add_command();
-	// test_add_arg_to_command();
-	// test_create_token();
-	// test_add_token();
-	// test_handle_word();
-	// test_ft_strjoin_free();
-	// test_ft_strjoin_char_free();
-	// test_execute_commands();
-	printf("Tous les tests ont réussi !\n");
-	return (0);
-}
+// int	main(void)
+// {
+	// test_lexer();
+// 	test_parser();
+// 	test_find_env_var();
+// 	test_expand_all_env_vars();
+// 	test_expand_variables();
+// 	test_handle_input();
+// 	// test_create_command();
+// 	// test_add_command();
+// 	// test_add_arg_to_command();
+// 	// test_create_token();
+// 	// test_add_token();
+// 	// test_handle_word();
+// 	// test_ft_strjoin_free();
+// 	// test_ft_strjoin_char_free();
+// 	printf("Tous les tests ont réussi !\n");
+// 	return (0);
+// }

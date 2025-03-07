@@ -6,7 +6,7 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:17:11 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/14 19:01:20 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/07 15:31:16 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	add_env_node(t_env **env_list, t_env *new)
 }
 
 // INITIALISATION DE L'ENVIRONNEMENT
-t_env	*init_env(char **envp)
+t_env	*init_env(char **ev)
 {
 	t_env	*env_list;
 	char	*equals;
@@ -55,12 +55,12 @@ t_env	*init_env(char **envp)
 
 	env_list = NULL;
 	i = 0;
-	while (envp[i])
+	while (ev[i])
 	{
-		equals = ft_strchr(envp[i], '=');
+		equals = ft_strchr(ev[i], '=');
 		if (equals)
 		{
-			key = extract_key(envp[i], equals);
+			key = extract_key(ev[i], equals);
 			value = ft_strdup(equals + 1);
 			if (!key || !value)
 			{
@@ -75,15 +75,29 @@ t_env	*init_env(char **envp)
 	return (env_list);
 }
 
+t_env	*init_min_env()
+{
+	t_env	*env;
+
+	env = create_env_node("PWD", getcwd(NULL, 0));
+	add_env_node(&env, create_env_node("SHLVL", "1"));
+	add_env_node(&env, create_env_node("_", "/usr/bin/env"));
+	add_env_node(&env, create_env_node("PATH", "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"));
+	return (env);
+}
+
 // INITIALISATION DE LA STRUCTURE PRINCIPALE DU SHELL
-t_shell	*init_shell(char **envp)
+t_shell	*init_shell(char **ev)
 {
 	t_shell	*shell;
 
 	shell = (t_shell *)ft_calloc(1, sizeof(t_shell));
 	if (!shell)
 		return (NULL);
-	shell->env = init_env(envp);
+	if (ev)
+		shell->env = init_env(ev);
+	else
+		shell->env = init_min_env();
 	if (!shell->env)
 	{
 		free(shell);
@@ -91,4 +105,12 @@ t_shell	*init_shell(char **envp)
 	}
 	shell->running = 1;
 	return (shell);
+}
+
+t_builtin	*init_builtins() // A compléter
+{
+	t_builtin	*builtins;
+
+	builtins = (t_builtin *)ft_calloc(1, sizeof(t_builtin));
+	return (builtins);
 }

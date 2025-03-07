@@ -6,7 +6,7 @@
 #    By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/02/28 16:36:37 by ysaadaou         ###   ########.fr        #
+#    Updated: 2025/03/07 15:36:31 by ysaadaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,9 @@ PARSING_FILES = ./parsing/parsing.c \
 SRCS = minishell.c \
 	minishell_init.c \
 	free_functions.c \
+	signals.c \
+	exec_functions.c \
+	exec_utils.c \
 	$(PARSING_FILES) \
 	# $(BUILTINS_FILES) \
 

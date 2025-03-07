@@ -6,7 +6,7 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:37:19 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/28 15:37:55 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:19:13 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,16 @@ char	*ft_strjoin_char_free(char *s, char c)
 	result[len + 1] = '\0';
 	free(s);
 	return (result);
+}
+
+void free_split(char **split)
+{
+    int i;
+
+    if (!split)
+        return;
+    i = 0;
+    while (split[i])
+        free(split[i++]);
+    free(split);
 }

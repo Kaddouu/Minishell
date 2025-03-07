@@ -6,59 +6,36 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:37:58 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/26 17:37:36 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/07 15:25:41 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_sigint(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-void	setup_signals(void)
-{
-	struct sigaction	sa;
-
-	ft_memset(&sa, 0, sizeof(sa));
-	sa.sa_handler = &handle_sigint;
-	sigaction(SIGINT, &sa, NULL);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void	handle_eof(t_shell *shell)
-{
-	free_shell(shell);
-	rl_clear_history();
-	exit(0);
-}
-
-// int	main(int argc, char **argv, char **envp)
+// int	main(int ac, char **av, char **ev)
 // {
 // 	t_shell	*shell;
+// 	t_builtin	*builtins;
 // 	char	*line;
 
-// 	(void)argc;
-// 	(void)argv;
-// 	shell = init_shell(envp);
+// 	(void)ac;
+// 	(void)av;
+// 	setup_signals();
+// 	shell = init_shell(ev);
+// 	builtins = init_builtins();
 // 	if (!shell)
 // 		return (1);
-// 	setup_signals();
 // 	while (shell->running)
 // 	{
 // 		line = readline("minishell> ");
-// 		if (!line)
+// 		if (line == NULL)
 // 			handle_eof(shell);
 // 		if (ft_strlen(line) > 0)
 // 		{
 // 			add_history(line);
-// 			if (handle_input(shell, line) == -1)
-// 				shell->running = 0;
+// 			shell->tokens = lexer(line);
+// 			shell->cmds = parser(shell->tokens);
+// 			execute_commands(shell, builtins);
 // 		}
 // 		free(line);
 // 	}
@@ -66,3 +43,40 @@ void	handle_eof(t_shell *shell)
 // 	rl_clear_history();
 // 	return (shell->exit_status);
 // }
+
+int	main(int ac, char **av, char **ev)
+{
+	t_shell		*shell;
+	t_builtin	*builtins;
+	char		*line;
+
+	(void)ac;
+	(void)av;
+	setup_signals(); // gestion des signaux
+	shell = init_shell(ev);
+	builtins = init_builtins();
+	if (!shell)
+		return (1);
+	while (shell->running)
+	{
+		line = readline("minishell> ");
+		if (line == NULL)
+			handle_eof(shell); // on gere le CTRL + D, c'est un signal qui doit pouvoir intervenir tout le temps
+		if (ft_strlen(line) > 0)
+		{
+			add_history(line);
+			shell->tokens = lexer(line);
+			shell->cmds = parser(shell->tokens);
+			if (shell->cmds) // on lexe puis on parse et on verifie que y'a bien quelque chose
+				execute_commands(shell, builtins);
+			free_token(shell->tokens);
+			free_command(shell->cmds);
+			shell->tokens = NULL;
+			shell->cmds = NULL;
+		}
+		free(line);
+	}
+	free_shell(shell);
+	rl_clear_history();
+	return (shell->exit_status);
+}
