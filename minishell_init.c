@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_init.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:17:11 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 17:56:39 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:47:33 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	add_env_node(t_env **env_list, t_env *new)
 	*env_list = new;
 }
 
-// INITIALISATION DE L'ENVIRONNEMENT
 t_env	*init_env(char **ev)
 {
 	t_env	*env_list;
@@ -63,11 +62,7 @@ t_env	*init_env(char **ev)
 			key = extract_key(ev[i], equals);
 			value = ft_strdup(equals + 1);
 			if (!key || !value)
-			{
-				free(key);
-				free(value);
-				return (NULL);
-			}
+				return (free(key), free(value), NULL);
 			add_env_node(&env_list, create_env_node(key, value));
 		}
 		i++;
@@ -87,7 +82,6 @@ t_env	*init_min_env(void)
 	return (env);
 }
 
-// INITIALISATION DE LA STRUCTURE PRINCIPALE DU SHELL
 t_shell	*init_shell(char **ev)
 {
 	t_shell	*shell;

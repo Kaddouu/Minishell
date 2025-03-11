@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:05 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 17:10:06 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:36:44 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	ft_cd(char **args, t_shell *shell)
 {
-	(void)shell;
 	char	*path;
 
+	(void)shell;
 	if (!args[1])
 		return (1);
 	path = args[1];

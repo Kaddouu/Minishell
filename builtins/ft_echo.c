@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 17:10:13 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:36:48 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ static int	is_flag_n(char *str)
 	return (0);
 }
 
-int ft_echo(char **args, t_shell *shell)
+int	ft_echo(char **args, t_shell *shell)
 {
-	(void)shell;
 	int	i;
 	int	newline;
 
+	(void)shell;
 	newline = 1;
 	i = 1;
 	while (args[i] && is_flag_n(args[i]))

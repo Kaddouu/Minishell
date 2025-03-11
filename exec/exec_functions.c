@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 13:52:16 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 17:12:16 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 13:07:35 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	execute_builtin(t_shell *shell, t_command *cmd, t_builtin *builtins)
 {
@@ -22,9 +22,9 @@ int	execute_builtin(t_shell *shell, t_command *cmd, t_builtin *builtins)
 		if (ft_strcmp(cmd->args[0], builtins[i].name) == 0)
 		{
 			if (ft_strcmp(cmd->args[0], "export") == 0)
-    			return (ft_export(cmd->args, shell));
+				return (ft_export(cmd->args, shell));
 			else if (ft_strcmp(cmd->args[0], "unset") == 0)
-   				 return (ft_unset(cmd->args, shell));
+				return (ft_unset(cmd->args, shell));
 			else if (ft_strcmp(cmd->args[0], "env") == 0)
 				return (builtins[i].func(env_to_array(shell->env), shell));
 			else
@@ -48,9 +48,8 @@ void	execute_external(t_shell *shell, t_command *cmd, t_env *env)
 		return ;
 	}
 	if (pid == 0)
-	{ // Processus enfant
+	{
 		handle_redirection(cmd);
-		// Gérer les redirections avant d'executer la commande
 		path = find_path(cmd->args[0], env);
 		if (!path || access(path, X_OK) != 0)
 		{
@@ -68,7 +67,7 @@ void	execute_external(t_shell *shell, t_command *cmd, t_env *env)
 		exit(1);
 	}
 	else
-	{ // Processus parent
+	{
 		waitpid(pid, &shell->exit_status, 0);
 		if (WIFEXITED(shell->exit_status))
 			shell->exit_status = WEXITSTATUS(shell->exit_status);
@@ -89,7 +88,7 @@ void	execute_pipeline(t_shell *shell, t_builtin *builtins)
 
 	cmd = shell->cmds;
 	prev_fd = STDIN_FILENO;
-	cmd_count = 0; // Compter le nombre de commandes pour allouer les PIDs
+	cmd_count = 0;
 	tmp = cmd;
 	while (tmp)
 	{
@@ -105,7 +104,6 @@ void	execute_pipeline(t_shell *shell, t_builtin *builtins)
 	i = 0;
 	while (cmd)
 	{
-		// Créer un pipe si ce n'est pas la dernière commande
 		if (cmd->next && pipe(pipe_fd) == -1)
 		{
 			ft_putstr_fd("Pipe failed\n", 2);
@@ -119,7 +117,7 @@ void	execute_pipeline(t_shell *shell, t_builtin *builtins)
 			shell->exit_status = 1;
 			break ;
 		}
-		if (pids[i] == 0) // Processus enfant
+		if (pids[i] == 0)
 		{
 			if (prev_fd != STDIN_FILENO)
 			{
@@ -157,7 +155,6 @@ void	execute_pipeline(t_shell *shell, t_builtin *builtins)
 				exit(1);
 			}
 		}
-		// Processus parent
 		if (prev_fd != STDIN_FILENO)
 			close(prev_fd);
 		if (cmd->next)
@@ -168,7 +165,6 @@ void	execute_pipeline(t_shell *shell, t_builtin *builtins)
 		cmd = cmd->next;
 		i++;
 	}
-	// Attendre tous les processus enfants
 	for (int j = 0; j < cmd_count; j++)
 	{
 		waitpid(pids[j], &shell->exit_status, 0);

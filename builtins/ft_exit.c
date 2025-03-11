@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:50:16 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 17:10:22 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:36:56 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,11 @@ static int	ft_isdigitstr(char *str)
 
 int	ft_exit(char **args, t_shell *shell)
 {
-	(void)shell;
 	int	status;
 
+	(void)shell;
 	status = 0;
 	ft_putendl_fd("exit", 2);
-
 	if (args[1])
 	{
 		if (!ft_isdigitstr(args[1]))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:29:13 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/02/28 15:39:42 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:44:19 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	expand_all_env_vars(t_token *tokens, t_env *env)
 			}
 			else
 			{
-				// Variable non trouvée, remplacer par une chaîne vide
 				free(current->content);
 				current->content = ft_strdup("");
 				current->type = WORD;
@@ -51,7 +50,6 @@ void	expand_all_env_vars(t_token *tokens, t_env *env)
 		}
 		else if (current->type == WORD)
 		{
-			// Vérifier si le mot contient des variables à expandre
 			if (ft_strchr(current->content, '$'))
 			{
 				expanded = expand_variables(current->content, env);

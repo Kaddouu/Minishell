@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:30:13 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/04 15:51:16 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:45:12 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,56 +68,59 @@
 // 	return (tokens);
 // }
 
-t_token *lexer(char *input)
+t_token	*lexer(char *input)
 {
-    t_token *tokens = NULL;
-    t_token *last = NULL;
-    char *ptr = input;
+	t_token	*tokens;
+	t_token	*last;
+	char	*ptr;
 
-    while (*ptr)
-    {
-        if (ft_isspace(*ptr))
-        {
-            ptr++;
-            continue;
-        }
-        else if (*ptr == '|')
-        {
-            add_token(&tokens, &last, create_token(ft_strdup("|"), PIPE));
-            ptr++;
-        }
-        else if (*ptr == '<' && *(ptr + 1) == '<')
-        {
-            add_token(&tokens, &last, create_token(ft_strdup("<<"), HEREDOC));
-            ptr += 2;
-        }
-        else if (*ptr == '>' && *(ptr + 1) == '>')
-        {
-            add_token(&tokens, &last, create_token(ft_strdup(">>"), APPEND));
-            ptr += 2;
-        }
-        else if (*ptr == '<')
-        {
-            add_token(&tokens, &last, create_token(ft_strdup("<"), REDIR_IN));
-            ptr++;
-        }
-        else if (*ptr == '>')
-        {
-            add_token(&tokens, &last, create_token(ft_strdup(">"), REDIR_OUT));
-            ptr++;
-        }
-        else if (*ptr == '$')
-            handle_env_var(&tokens, &last, &ptr);
-        else if (*ptr == '\'' || *ptr == '"')
-        {
-            if (!handle_quotes(&tokens, &last, &ptr)) // Vérifier le retour
-            {
-                free_token(tokens); // Libérer les tokens en cas d'erreur
-                return NULL;
-            }
-        }
-        else
-            handle_word(&tokens, &last, &ptr);
-    }
-    return tokens;
+	tokens = NULL;
+	last = NULL;
+	ptr = input;
+	while (*ptr)
+	{
+		if (ft_isspace(*ptr))
+		{
+			ptr++;
+			continue ;
+		}
+		else if (*ptr == '|')
+		{
+			add_token(&tokens, &last, create_token(ft_strdup("|"), PIPE));
+			ptr++;
+		}
+		else if (*ptr == '<' && *(ptr + 1) == '<')
+		{
+			add_token(&tokens, &last, create_token(ft_strdup("<<"), HEREDOC));
+			ptr += 2;
+		}
+		else if (*ptr == '>' && *(ptr + 1) == '>')
+		{
+			add_token(&tokens, &last, create_token(ft_strdup(">>"), APPEND));
+			ptr += 2;
+		}
+		else if (*ptr == '<')
+		{
+			add_token(&tokens, &last, create_token(ft_strdup("<"), REDIR_IN));
+			ptr++;
+		}
+		else if (*ptr == '>')
+		{
+			add_token(&tokens, &last, create_token(ft_strdup(">"), REDIR_OUT));
+			ptr++;
+		}
+		else if (*ptr == '$')
+			handle_env_var(&tokens, &last, &ptr);
+		else if (*ptr == '\'' || *ptr == '"')
+		{
+			if (!handle_quotes(&tokens, &last, &ptr))
+			{
+				free_token(tokens);
+				return (NULL);
+			}
+		}
+		else
+			handle_word(&tokens, &last, &ptr);
+	}
+	return (tokens);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 15:40:26 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 17:32:03 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 13:07:00 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct s_command
 	char				*output;
 	char				*heredoc;
 	char				*append;
-	int					expand_heredoc; // 1 pour expanser, 0 sinon
+	int					expand_heredoc;
 	struct s_command	*next;
 }						t_command;
 
@@ -64,25 +64,29 @@ typedef struct s_shell
 }						t_shell;
 
 // Fonctions utilitaires
-char		*expand_variables(char *str, t_env *env);
-t_env		*find_env_var(t_env *env, char *var_name);
-void		expand_all_env_vars(t_token *tokens, t_env *env);
+char					*expand_variables(char *str, t_env *env);
+t_env					*find_env_var(t_env *env, char *var_name);
+void					expand_all_env_vars(t_token *tokens, t_env *env);
 
 // Fonctions handling
-int			handle_input(t_shell *shell, char *line);
-void		handle_word(t_token **tokens, t_token **last, char **ptr);
-int			handle_quotes(t_token **tokens, t_token **last, char **ptr);
-void		handle_env_var(t_token **tokens, t_token **last, char **ptr);
+int						handle_input(t_shell *shell, char *line);
+void					handle_word(t_token **tokens, t_token **last,
+							char **ptr);
+int						handle_quotes(t_token **tokens, t_token **last,
+							char **ptr);
+void					handle_env_var(t_token **tokens, t_token **last,
+							char **ptr);
 
 // Fonctions de tokenisation
-t_token		*lexer(char *input);
-t_token		*create_token(char *content, t_type type);
-void		add_token(t_token **tokens, t_token **last, t_token *new_token);
+t_token					*lexer(char *input);
+t_token					*create_token(char *content, t_type type);
+void					add_token(t_token **tokens, t_token **last,
+							t_token *new_token);
 
 // Fonctions de parsing
-t_command	*parser(t_token *tokens);
-t_command	*create_command(void);
-void		add_arg_to_command(t_command *cmd, char *arg);
-void		add_command(t_command **cmds, t_command *new_cmd);
+t_command				*parser(t_token *tokens);
+t_command				*create_command(void);
+void					add_arg_to_command(t_command *cmd, char *arg);
+void					add_command(t_command **cmds, t_command *new_cmd);
 
 #endif

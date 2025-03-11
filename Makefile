@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+         #
+#    By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/03/07 16:39:51 by ysaadaou         ###   ########.fr        #
+#    Updated: 2025/03/11 12:13:44 by ilkaddou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,7 @@ NAME = minishell
 
 SRCS_DIR = ./srcs
 
-BUILTINS_FILES = ./builtins/builtins_utils.c \
-	./builtins/ft_cd.c \
+BUILTINS_FILES = ./builtins/ft_cd.c \
 	./builtins/ft_echo.c \
 	./builtins/ft_env.c \
 	./builtins/ft_exit.c \
@@ -30,14 +29,16 @@ PARSING_FILES = ./parsing/parsing.c \
 	./parsing/lexer_utils.c \
 	./parsing/test_functions.c \
 
+EXEC_FILES = ./exec/exec_functions.c \
+	./exec/exec_utils.c \
+
 SRCS = minishell.c \
 	minishell_init.c \
 	free_functions.c \
 	signals.c \
-	exec_functions.c \
-	exec_utils.c \
-	$(PARSING_FILES) \
 	$(BUILTINS_FILES) \
+	$(PARSING_FILES) \
+	$(EXEC_FILES) \
 
 HEAD = minishell.h
 

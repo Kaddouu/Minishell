@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 12:00:00 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/03/07 15:03:22 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/11 12:02:55 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,22 +59,18 @@ void	test_echo(void)
 	print_separator();
 	printf("TEST DE FT_ECHO\n");
 	print_separator();
-	
 	printf("Test 1 (echo Hello World) :\n");
 	printf("Résultat attendu: Hello World (suivi d'un saut de ligne)\n");
 	fflush(stdout);
 	ft_echo(args1);
-	
 	printf("\nTest 2 (echo -n Hello World) :\n");
 	printf("Résultat attendu: Hello World (sans saut de ligne)\n");
 	fflush(stdout);
 	ft_echo(args2);
-	
 	printf("\nTest 3 (echo -nnn Hello World) :\n");
 	printf("Résultat attendu: Hello World (sans saut de ligne)\n");
 	fflush(stdout);
 	ft_echo(args3);
-	
 	printf("\nTest 4 (echo) :\n");
 	printf("Résultat attendu: (saut de ligne seulement)\n");
 	fflush(stdout);
@@ -89,7 +85,6 @@ void	test_env(void)
 	print_separator();
 	printf("TEST DE FT_ENV\n");
 	print_separator();
-	
 	env = create_test_env();
 	if (!env)
 	{
@@ -97,17 +92,14 @@ void	test_env(void)
 		fflush(stdout);
 		return ;
 	}
-	
 	printf("Test avec un environnement valide :\n");
 	printf("Résultat attendu: Liste des variables d'environnement (PATH, HOME, USER)\n");
 	fflush(stdout);
 	ft_env(env);
-	
 	printf("\nTest avec un environnement NULL :\n");
 	printf("Résultat attendu: \"Env not found\" (sur stderr)\n");
 	fflush(stdout);
 	ft_env(NULL);
-	
 	free_env_test(env);
 }
 
@@ -117,7 +109,6 @@ void	test_pwd(void)
 	print_separator();
 	printf("TEST DE FT_PWD\n");
 	print_separator();
-	
 	printf("Répertoire de travail actuel :\n");
 	printf("Résultat attendu: Le chemin absolu du répertoire de travail actuel\n");
 	fflush(stdout);
@@ -133,11 +124,11 @@ void	test_cd(void)
 	char	*args2[] = {"cd", "/tmp", NULL};
 	char	*args3[] = {"cd", "dossier_inexistant", NULL};
 	char	*args4[] = {"cd", NULL};
+	int		ret;
 
 	print_separator();
 	printf("TEST DE FT_CD\n");
 	print_separator();
-	
 	// Test 1: cd ..
 	cwd_before = getcwd(NULL, 0);
 	printf("Test 1: cd ..\n");
@@ -150,7 +141,6 @@ void	test_cd(void)
 	fflush(stdout);
 	free(cwd_before);
 	free(cwd_after);
-	
 	// Test 2: cd /tmp
 	cwd_before = getcwd(NULL, 0);
 	printf("\nTest 2: cd /tmp\n");
@@ -163,18 +153,16 @@ void	test_cd(void)
 	fflush(stdout);
 	free(cwd_before);
 	free(cwd_after);
-	
 	// Test 3: cd vers un dossier inexistant
 	printf("\nTest 3: cd vers un dossier inexistant\n");
 	printf("Résultat attendu: \"minishell: cd: dossier_inexistant: No such file or directory\"\n");
 	fflush(stdout);
 	ft_cd(args3);
-	
 	// Test 4: cd sans arguments
 	printf("\nTest 4: cd sans arguments\n");
 	printf("Résultat attendu: Code de retour 1 (aucun changement de répertoire)\n");
 	fflush(stdout);
-	int ret = ft_cd(args4);
+	ret = ft_cd(args4);
 	printf("Code de retour: %d\n", ret);
 	fflush(stdout);
 }
@@ -190,7 +178,6 @@ void	test_export(void)
 	print_separator();
 	printf("TEST DE FT_EXPORT\n");
 	print_separator();
-	
 	env = create_test_env();
 	if (!env)
 	{
@@ -198,35 +185,29 @@ void	test_export(void)
 		fflush(stdout);
 		return ;
 	}
-	
 	// Afficher l'environnement avant
 	printf("Environnement avant export :\n");
 	fflush(stdout);
 	ft_env(env);
-	
 	// Test 1: export une variable valide
 	printf("\nTest 1: export d'une variable valide (TEST_VAR=test_value)\n");
 	printf("Résultat attendu: Ajout de TEST_VAR=test_value à l'environnement\n");
 	fflush(stdout);
 	ft_export(args1, &env);
-	
 	// Afficher l'environnement après
 	printf("Environnement après export :\n");
 	fflush(stdout);
 	ft_env(env);
-	
 	// Test 2: export une variable invalide
 	printf("\nTest 2: export d'une variable invalide (123INVALID=value)\n");
 	printf("Résultat attendu: \"minishell: export: `123INVALID=value': not a valid identifier\"\n");
 	fflush(stdout);
 	ft_export(args2, &env);
-	
 	// Test 3: export sans arguments
 	printf("\nTest 3: export sans arguments\n");
 	printf("Résultat attendu: Affichage de toutes les variables d'environnement précédées par \"declare -x\"\n");
 	fflush(stdout);
 	ft_export(args3, &env);
-	
 	free_env_test(env);
 }
 
@@ -238,11 +219,11 @@ void	test_unset(void)
 	char	*args2[] = {"unset", "123INVALID", NULL};
 	char	*args3[] = {"unset", "NONEXISTENT", NULL};
 	char	*args4[] = {"unset", NULL};
+	int		ret;
 
 	print_separator();
 	printf("TEST DE FT_UNSET\n");
 	print_separator();
-	
 	env = create_test_env();
 	if (!env)
 	{
@@ -250,43 +231,36 @@ void	test_unset(void)
 		fflush(stdout);
 		return ;
 	}
-	
 	// Afficher l'environnement avant
 	printf("Environnement avant unset :\n");
 	fflush(stdout);
 	ft_env(env);
-	
 	// Test 1: unset une variable existante
 	printf("\nTest 1: unset d'une variable existante (USER)\n");
 	printf("Résultat attendu: Suppression de USER de l'environnement\n");
 	fflush(stdout);
 	ft_unset(args1, &env);
-	
 	// Afficher l'environnement après
 	printf("Environnement après unset USER :\n");
 	fflush(stdout);
 	ft_env(env);
-	
 	// Test 2: unset une variable avec un nom invalide
 	printf("\nTest 2: unset d'une variable avec un nom invalide (123INVALID)\n");
 	printf("Résultat attendu: \"minishell: unset: `123INVALID': not a valid identifier\"\n");
 	fflush(stdout);
 	ft_unset(args2, &env);
-	
 	// Test 3: unset une variable inexistante
 	printf("\nTest 3: unset d'une variable inexistante (NONEXISTENT)\n");
 	printf("Résultat attendu: Aucune erreur, environnement inchangé\n");
 	fflush(stdout);
 	ft_unset(args3, &env);
-	
 	// Test 4: unset sans arguments
 	printf("\nTest 4: unset sans arguments\n");
 	printf("Résultat attendu: Aucune action (code de retour 0)\n");
 	fflush(stdout);
-	int ret = ft_unset(args4, &env);
+	ret = ft_unset(args4, &env);
 	printf("Code de retour: %d\n", ret);
 	fflush(stdout);
-	
 	free_env_test(env);
 }
 
@@ -296,7 +270,6 @@ void	test_exit_info(void)
 	print_separator();
 	printf("TEST DE FT_EXIT (Information seulement)\n");
 	print_separator();
-	
 	printf("Le test de ft_exit n'est pas effectué car cela terminerait le programme.\n");
 	printf("Pour tester ft_exit, vous pouvez utiliser les arguments suivants :\n");
 	printf("1. ft_exit([\"exit\", NULL]) - Résultat attendu: Affiche \"exit\" et termine avec code 0\n");
@@ -305,25 +278,25 @@ void	test_exit_info(void)
 	fflush(stdout);
 }
 
-int	main(int argc, char **argv)
-{
-	(void)argc;
-	(void)argv;
-	
-	printf("=== PROGRAMME DE TEST DES BUILTINS DE MINISHELL ===\n");
-	fflush(stdout);
-	
-	test_echo();
-	test_env();
-	test_pwd();
-	test_cd();
-	test_export();
-	test_unset();
-	test_exit_info();
-	
-	print_separator();
-	printf("=== TESTS TERMINÉS ===\n");
-	fflush(stdout);
-	
-	return (0);
-}
+// int	main(int argc, char **argv)
+// {
+// 	(void)argc;
+// 	(void)argv;
+
+// 	printf("=== PROGRAMME DE TEST DES BUILTINS DE MINISHELL ===\n");
+// 	fflush(stdout);
+
+// 	test_echo();
+// 	test_env();
+// 	test_pwd();
+// 	test_cd();
+// 	test_export();
+// 	test_unset();
+// 	test_exit_info();
+
+// 	print_separator();
+// 	printf("=== TESTS TERMINÉS ===\n");
+// 	fflush(stdout);
+
+// 	return (0);
+// }

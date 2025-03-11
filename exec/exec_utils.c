@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:14:03 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 16:52:22 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:54:38 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	is_builtin(char *cmd, t_builtin *builtins)
 {
@@ -29,9 +29,8 @@ int	is_builtin(char *cmd, t_builtin *builtins)
 void	handle_redirection(t_command *cmd)
 {
 	int	fd;
-	int pipe_fd[2];
+	int	pipe_fd[2];
 
-	// Redirection de sortie (>)
 	if (cmd->output)
 	{
 		fd = open(cmd->output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -45,7 +44,6 @@ void	handle_redirection(t_command *cmd)
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-	// Redirection en mode append (>>)
 	if (cmd->append)
 	{
 		fd = open(cmd->append, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -59,7 +57,6 @@ void	handle_redirection(t_command *cmd)
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-	// Redirection d'entrée (<)
 	if (cmd->input)
 	{
 		fd = open(cmd->input, O_RDONLY);
@@ -73,7 +70,6 @@ void	handle_redirection(t_command *cmd)
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
-	// Heredoc (<<)
 	if (cmd->heredoc)
 	{
 		if (pipe(pipe_fd) == -1)
@@ -148,7 +144,6 @@ char	**env_to_array(t_env *env)
 	char	**env_array;
 	int		i;
 
-	// Compter le nombre de variables d'environnement
 	count = 0;
 	current = env;
 	while (current)
@@ -159,7 +154,6 @@ char	**env_to_array(t_env *env)
 	env_array = malloc(sizeof(char *) * (count + 1));
 	if (!env_array)
 		return (NULL);
-	// Remplir le tableau avec "key=value"
 	current = env;
 	i = 0;
 	while (current)

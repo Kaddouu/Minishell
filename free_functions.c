@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:37:19 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 17:26:40 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/11 11:35:17 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,31 +69,31 @@ void	free_command(t_command *cmd)
 	}
 }
 
-void free_builtins(t_builtin *builtins)
+void	free_builtins(t_builtin *builtins)
 {
-    if (builtins)
-        free(builtins);
+	if (builtins)
+		free(builtins);
 }
 
-void free_shell(t_shell *shell)
+void	free_shell(t_shell *shell)
 {
-    if (!shell)
-        return;
-    free_env(shell->env);
-    free_token(shell->tokens);
-    free_command(shell->cmds);
-    free(shell->last_cmd);
-    free(shell);
+	if (!shell)
+		return ;
+	free_env(shell->env);
+	free_token(shell->tokens);
+	free_command(shell->cmds);
+	free(shell->last_cmd);
+	free(shell);
 }
 
-void free_split(char **split)
+void	free_split(char **split)
 {
-    int i;
+	int	i;
 
-    if (!split)
-        return;
-    i = 0;
-    while (split[i])
-        free(split[i++]);
-    free(split);
+	if (!split)
+		return ;
+	i = 0;
+	while (split[i])
+		free(split[i++]);
+	free(split);
 }
