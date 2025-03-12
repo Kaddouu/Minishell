@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:28:15 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/11 11:44:57 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/12 14:00:57 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,25 @@ void	add_token(t_token **tokens, t_token **last, t_token *new_token)
 	}
 }
 
-void	handle_env_var(t_token **tokens, t_token **last, char **ptr)
+void handle_env_var(t_token **tokens, t_token **last, char **ptr)
 {
-	char	*start;
-	char	*var_name;
+    char *start;
+    char *var_name;
 
-	(*ptr)++;
-	start = *ptr;
-	while (**ptr && (ft_isalnum(**ptr) || **ptr == '_'))
-		(*ptr)++;
-	var_name = ft_substr(start, 0, *ptr - start);
-	add_token(tokens, last, create_token(var_name, ENV));
+    (*ptr)++;
+    if (**ptr == '?')
+    {
+        var_name = ft_strdup("?");
+        (*ptr)++;
+    }
+    else
+    {
+        start = *ptr;
+        while (**ptr && (ft_isalnum(**ptr) || **ptr == '_'))
+            (*ptr)++;
+        var_name = ft_substr(start, 0, *ptr - start);
+    }
+    add_token(tokens, last, create_token(var_name, ENV));
 }
 
 void	handle_word(t_token **tokens, t_token **last, char **ptr)

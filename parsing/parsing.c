@@ -6,34 +6,34 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:11 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/11 11:45:42 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/12 13:52:58 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	handle_input(t_shell *shell, char *line)
+int handle_input(t_shell *shell, char *line)
 {
-	if (!line || !shell)
-		return (-1);
-	if (ft_strcmp(line, "exit") == 0)
-		return (-1);
-	shell->tokens = lexer(line);
-	if (!shell->tokens)
-		return (0);
-	expand_all_env_vars(shell->tokens, shell->env);
-	shell->cmds = parser(shell->tokens);
-	if (!shell->cmds)
-	{
-		free_token(shell->tokens);
-		shell->tokens = NULL;
-		return (0);
-	}
-	free_token(shell->tokens);
-	shell->tokens = NULL;
-	free_command(shell->cmds);
-	shell->cmds = NULL;
-	return (0);
+    if (!line || !shell)
+        return (-1);
+    if (ft_strcmp(line, "exit") == 0)
+        return (-1);
+    shell->tokens = lexer(line);
+    if (!shell->tokens)
+        return (0);
+    expand_all_env_vars(shell->tokens, shell->env, shell->exit_status);
+    shell->cmds = parser(shell->tokens);
+    if (!shell->cmds)
+    {
+        free_token(shell->tokens);
+        shell->tokens = NULL;
+        return (0);
+    }
+    free_token(shell->tokens);
+    shell->tokens = NULL;
+    free_command(shell->cmds);
+    shell->cmds = NULL;
+    return (0);
 }
 
 t_command	*parser(t_token *tokens)

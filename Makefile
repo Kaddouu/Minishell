@@ -6,7 +6,7 @@
 #    By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/03/11 12:13:44 by ilkaddou         ###   ########.fr        #
+#    Updated: 2025/03/12 13:53:36 by ilkaddou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,6 @@ PARSING_FILES = ./parsing/parsing.c \
 	./parsing/env_functions.c \
 	./parsing/lexer.c \
 	./parsing/lexer_utils.c \
-	./parsing/test_functions.c \
 
 EXEC_FILES = ./exec/exec_functions.c \
 	./exec/exec_utils.c \

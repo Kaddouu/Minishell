@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:53 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/11 11:37:17 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/12 14:24:01 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,20 +96,40 @@
 
 #include "../minishell.h"
 
-static int	is_valid_env_name(char *str)
+static int is_valid_env_name(char *str)
 {
-	int	i;
+    int i;
+    char *equals;
 
-	if (!str || !(*str) || ft_isdigit(str[0]))
-		return (0);
-	i = 0;
-	while (str[i])
-	{
-		if (!(ft_isalnum(str[i]) || str[i] == '_'))
-			return (0);
-		i++;
-	}
-	return (1);
+    if (!str || !str[0]) // Chaîne vide ou NULL
+        return (0);
+
+    equals = ft_strchr(str, '=');
+    if (equals) // S'il y a un '=', vérifier seulement avant
+    {
+        i = 0;
+        while (&str[i] < equals)
+        {
+            if (i == 0 && isdigit(str[i])) // Pas de chiffre au début
+                return (0);
+            if (!isalnum(str[i]) && str[i] != '_') // Caractères valides : alphanum + '_'
+                return (0);
+            i++;
+        }
+    }
+    else // Pas de '=', vérifier tout l'argument
+    {
+        if (isdigit(str[0]))
+            return (0);
+        i = 0;
+        while (str[i])
+        {
+            if (!isalnum(str[i]) && str[i] != '_')
+                return (0);
+            i++;
+        }
+    }
+    return (1);
 }
 
 static void	remove_env_var(t_env **env, char *var_name)
@@ -137,24 +157,27 @@ static void	remove_env_var(t_env **env, char *var_name)
 	}
 }
 
-int	ft_unset(char **args, t_shell *shell)
+int ft_unset(char **args, t_shell *shell)
 {
-	int	i;
+    int i;
+    int ret;
 
-	if (!args[1])
-		return (0);
-	i = 1;
-	while (args[i])
-	{
-		if (!is_valid_env_name(args[i]))
-		{
-			ft_putstr_fd("minishell: unset: `", 2);
-			ft_putstr_fd(args[i], 2);
-			ft_putendl_fd("': not a valid identifier", 2);
-			return (1);
-		}
-		remove_env_var(&shell->env, args[i]);
-		i++;
-	}
-	return (0);
+    if (!args[1])
+        return (0);
+    i = 1;
+    ret = 0;
+    while (args[i])
+    {
+        if (!is_valid_env_name(args[i]))
+        {
+            ft_putstr_fd("minishell: unset: `", 2);
+            ft_putstr_fd(args[i], 2);
+            ft_putendl_fd("': not a valid identifier", 2);
+            ret = 1; // Marquer une erreur, mais continuer
+        }
+        else
+            remove_env_var(&shell->env, args[i]);
+        i++;
+    }
+    return (ret);
 }

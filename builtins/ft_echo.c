@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/11 11:36:48 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/12 13:41:26 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ int	ft_echo(char **args, t_shell *shell)
 	{
 		newline = 0;
 		i++;
+	}
+	if (*args[i] == '$' && *args[i + 1] == '?' && !(*args[i + 2]))
+	{
+		ft_putstr_fd(ft_itoa(shell->exit_status), 1);
+		return (1);
 	}
 	while (args[i])
 	{
