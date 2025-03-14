@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:37:58 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/12 13:53:20 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/14 07:39:30 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int	main(int ac, char **av, char **ev)
 			}
 		}
 		free(line);
-		// printf("%d\n", shell->exit_status);
 	}
 	free_builtins(builtins);
 	free_shell(shell);
