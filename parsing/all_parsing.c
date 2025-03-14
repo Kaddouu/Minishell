@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   all_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 11:40:01 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/03/11 11:43:33 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:53:11 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ t_command	*parser(t_token *tokens)
 			return (NULL);
 		}
 	}
-	return cmds;
+	return (cmds);
 }
 
 t_token	*lexer(char *input)
@@ -248,13 +248,13 @@ t_token	*lexer(char *input)
 			if (!handle_quotes(&tokens, &last, &ptr))
 			{
 				free_token(tokens);
-				return NULL;
+				return (NULL);
 			}
 		}
 		else
 			handle_word(&tokens, &last, &ptr);
 	}
-	return tokens;
+	return (tokens);
 }
 
 t_token	*create_token(char *content, t_type type)
@@ -314,43 +314,43 @@ void	handle_word(t_token **tokens, t_token **last, char **ptr)
 
 int	handle_quotes(t_token **tokens, t_token **last, char **ptr)
 {
-	char	quote;
-	char	*start;
-	char	*content;
-	t_token	*new_token;
-
+	char quote;         // Type de guillemet (' ou ")
+	char *start;        // Début du contenu entre guillemets
+	char *content;      // Contenu extrait
+	t_token *new_token; // Nouveau token à créer
+	printf("%s", new_token->content);
 	if (!tokens || !last || !ptr || !*ptr)
-		return 0;
-	quote = **ptr;
-	(*ptr)++;
-	start = *ptr;
+		return (0);
+	quote = **ptr; // Récupère le type de guillemet
+	(*ptr)++;      // Passe le guillemet ouvrant
+	start = *ptr;  // Pointe sur le début du contenu
 	while (**ptr && **ptr != quote)
 	{
 		if (quote == '"' && **ptr == '$')
 		{
 			handle_env_var(tokens, last, ptr);
-			start = *ptr;
+			start = *ptr; // Met à jour le début après la variable
 		}
 		else
-			(*ptr)++;
+			(*ptr)++; // Avance si pas de variable ou guillemet simple
 	}
 	if (!**ptr)
 	{
 		printf("Erreur : guillemet non fermé\n");
-		return 0;
+		return (0);
 	}
 	content = ft_substr(start, 0, *ptr - start);
 	if (!content)
-		return 0;
+		return (0);
 	new_token = create_token(content, WORD);
 	if (!new_token)
 	{
 		free(content);
-		return 0;
+		return (0);
 	}
 	add_token(tokens, last, new_token);
-	(*ptr)++;
-	return 1;
+	(*ptr)++; // Passe le guillemet fermant
+	return (1);
 }
 
 t_env	*find_env_var(t_env *env, char *var_name)
@@ -408,7 +408,7 @@ t_command	*create_command(void)
 
 	cmd = malloc(sizeof(t_command));
 	if (!cmd)
-		return NULL;
+		return (NULL);
 	cmd->args = NULL;
 	cmd->input = NULL;
 	cmd->output = NULL;
@@ -416,7 +416,7 @@ t_command	*create_command(void)
 	cmd->expand_heredoc = 1;
 	cmd->append = NULL;
 	cmd->next = NULL;
-	return cmd;
+	return (cmd);
 }
 
 void	add_command(t_command **cmds, t_command *new_cmd)
@@ -473,10 +473,10 @@ char	*expand_variables(char *str, t_env *env)
 	char	*temp;
 
 	if (!str || !env)
-		return NULL;
+		return (NULL);
 	result = ft_strdup("");
 	if (!result)
-		return NULL;
+		return (NULL);
 	ptr = str;
 	while (*ptr)
 	{
@@ -491,7 +491,7 @@ char	*expand_variables(char *str, t_env *env)
 			if (!var_name)
 			{
 				free(result);
-				return NULL;
+				return (NULL);
 			}
 			env_var = find_env_var(env, var_name);
 			if (env_var)
@@ -501,7 +501,7 @@ char	*expand_variables(char *str, t_env *env)
 				{
 					free(var_name);
 					free(result);
-					return NULL;
+					return (NULL);
 				}
 				result = temp;
 			}
@@ -513,11 +513,11 @@ char	*expand_variables(char *str, t_env *env)
 			if (!temp)
 			{
 				free(result);
-				return NULL;
+				return (NULL);
 			}
 			result = temp;
 			ptr++;
 		}
 	}
-	return result;
+	return (result);
 }

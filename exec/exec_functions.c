@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 13:52:16 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/11 13:07:35 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:14:46 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	execute_external(t_shell *shell, t_command *cmd, t_env *env)
 		ft_putstr_fd(cmd->args[0], 2);
 		ft_putstr_fd("\n", 2);
 		free(path);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -177,6 +177,8 @@ void	execute_pipeline(t_shell *shell, t_builtin *builtins)
 void	execute_commands(t_shell *shell, t_builtin *builtins)
 {
 	t_command	*cmd;
+	int			saved_stdin;
+	int			saved_stdout;
 
 	cmd = shell->cmds;
 	if (!cmd)
@@ -187,7 +189,16 @@ void	execute_commands(t_shell *shell, t_builtin *builtins)
 	{
 		handle_heredoc(shell, cmd);
 		if (is_builtin(cmd->args[0], builtins))
+		{
+			saved_stdin = dup(STDIN_FILENO);
+			saved_stdout = dup(STDOUT_FILENO);
+			handle_redirection(cmd);
 			shell->exit_status = execute_builtin(shell, cmd, builtins);
+			dup2(saved_stdin, STDIN_FILENO);
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdin);
+			close(saved_stdout);
+		}
 		else
 			execute_external(shell, cmd, shell->env);
 	}

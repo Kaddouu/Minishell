@@ -6,13 +6,13 @@
 /*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:30:13 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 08:15:21 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:57:30 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_token	*lexer(char *input)
+t_token *lexer(char *input)
 {
 	t_token	*tokens;
 	t_token	*last;
@@ -55,11 +55,11 @@ t_token	*lexer(char *input)
 		}
 		else if (*ptr == '$')
 			handle_env_var(&tokens, &last, &ptr);
-		else if (*ptr == '\'' || *ptr == '"')
+		else if (*ptr == '\'' || *ptr == '"' || *ptr == '\'')
 		{
-			if (!handle_quotes(&tokens, &last, &ptr))
+            if (!handle_quotes(&tokens, &last, &ptr))
 			{
-				free_token(tokens);
+                free_token(tokens);
 				return (NULL);
 			}
 		}

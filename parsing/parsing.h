@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 15:40:26 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/12 13:52:36 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/14 09:29:23 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ typedef struct s_shell
 // Fonctions utilitaires
 char					*expand_variables(char *str, t_env *env);
 t_env					*find_env_var(t_env *env, char *var_name);
-void expand_all_env_vars(t_token *tokens, t_env *env, int exit_status);
+void					expand_all_env_vars(t_token *tokens, t_env *env,
+							int exit_status);
 // Fonctions handling
 int						handle_input(t_shell *shell, char *line);
 void					handle_word(t_token **tokens, t_token **last,
