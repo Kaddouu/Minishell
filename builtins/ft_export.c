@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:13 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 09:30:29 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/14 12:40:22 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,29 @@ static int	is_valid_env_name(char *str)
 {
 	int		i;
 	char	*equals;
-
-	if (!str || !str[0]) // Chaîne vide ou NULL
-		return (0);
+    
+	if (!str || !str[0])
+    return (0);
 	equals = ft_strchr(str, '=');
-	if (equals) // S'il y a un '=', vérifier seulement avant
+    i = -1;
+	if (equals)
 	{
-		i = 0;
-		while (str[i] != '=')
+		while (str[++i] != '=')
 		{
-			if (i == 0 && isdigit(str[i]))
-				return (0); // Pas de chiffre au début
-			if (!isalnum(str[i]) && str[i] != '_')
-				return (0); // Caractères valides : alphanum + '_'
-			i++;
+			if (i == -1 && ft_isdigit(str[i]))
+				return (0);
+			if (!ft_isalnum(str[i]) && str[i] != '_')
+				return (0);
 		}
 	}
-	else // Pas de '=', vérifier tout l'argument
+	else
 	{
-		if (isdigit(str[0]))
+		if (ft_isdigit(str[0]))
 			return (0);
-		i = 0;
-		while (str[i])
+		while (str[++i])
 		{
-			if (!isalnum(str[i]) && str[i] != '_')
+			if (!ft_isalnum(str[i]) && str[i] != '_')
 				return (0);
-			i++;
 		}
 	}
 	return (1);
@@ -59,7 +56,7 @@ static void	add_or_update_env(t_env **env, char *key, char *value)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
-			printf("Updated env: %s=%s\n", key, value); // Debug
+			printf("Updated env: %s=%s\n", key, value);
 			return ;
 		}
 		current = current->next;
@@ -71,7 +68,7 @@ static void	add_or_update_env(t_env **env, char *key, char *value)
 	new_node->value = ft_strdup(value);
 	new_node->next = *env;
 	*env = new_node;
-	printf("Added env: %s=%s\n", key, value); // Debug
+	printf("Added env: %s=%s\n", key, value);
 }
 
 int	ft_export(char **args, t_shell *shell)
@@ -105,11 +102,8 @@ int	ft_export(char **args, t_shell *shell)
 		equals = ft_strchr(args[i], '=');
 		if (equals)
 		{
-			// Extraire la clé (partie avant le '=')
 			key = ft_substr(args[i], 0, equals - args[i]);
-			// Extraire la valeur (partie après le '=')
 			value = ft_strdup(equals + 1);
-			// Valider uniquement la clé
 			if (!is_valid_env_name(key))
 			{
 				ft_putstr_fd("minishell: export: `", 2);
@@ -121,7 +115,6 @@ int	ft_export(char **args, t_shell *shell)
 			}
 			else
 			{
-				// Supprimer les guillemets autour de la valeur si présents
 				if (value[0] == '"' && value[ft_strlen(value) - 1] == '"')
 				{
 					temp = ft_substr(value, 1, ft_strlen(value) - 2);
@@ -135,7 +128,6 @@ int	ft_export(char **args, t_shell *shell)
 		}
 		else
 		{
-			// Si pas de '=', valider l'argument entier comme clé
 			if (!is_valid_env_name(args[i]))
 			{
 				ft_putstr_fd("minishell: export: `", 2);
@@ -148,7 +140,7 @@ int	ft_export(char **args, t_shell *shell)
 				current = shell->env;
 				while (current && ft_strcmp(current->key, args[i]) != 0)
 					current = current->next;
-				if (!current) // Variable inexistante
+				if (!current)
 					add_or_update_env(&shell->env, args[i], "");
 			}
 		}
