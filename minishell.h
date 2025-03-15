@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:11:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 09:32:31 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/15 15:50:03 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+extern volatile sig_atomic_t g_shell_state;
+
 // Fonction d'initialisation
 t_builtin	*init_builtins(void);
 t_env		*init_env(char **envp);
@@ -36,7 +38,7 @@ t_shell		*init_shell(char **envp);
 void		execute_commands(t_shell *shell, t_builtin *builtins);
 void		execute_pipeline(t_shell *shell, t_builtin *builtins);
 void		execute_external(t_shell *shell, t_command *cmd, t_env *env);
-int			execute_builtin(t_shell *shell, t_command *cmd,
+int			execute_builtin(t_shell *shell, t_command *cmd, 
 				t_builtin *builtins);
 
 // Fonctions utilitaires
@@ -56,6 +58,7 @@ void		free_builtins(t_builtin *builtins);
 void		free_command_content(t_command *cmd);
 
 // Fonctions handling
+void		handle_sigint(int sig);
 void		handle_eof(t_shell *shell);
 void		handle_redirection(t_command *cmd);
 void		handle_heredoc(t_shell *shell, t_command *cmd);

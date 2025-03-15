@@ -6,35 +6,11 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:34:40 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/06 15:05:13 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:40:52 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <assert.h>
-
-// Test de la fonction lexer
-// void	test_lexer(void)
-// {
-// 	t_shell	shell;
-// 	char	*line;
-// 	int		result;
-// 	t_token	*current;
-
-// 	shell.env = NULL;
-// 	line = "awk '{print $9}' < | >> > | << | file1 | wc -c > file2";
-// 	result = handle_input(&shell, line);
-// 	if (result != 0)
-// 		printf("Erreur lors du traitement de l'entrée.\n");
-// 	current = shell.tokens;
-// 	while (current)
-// 	{
-// 		printf("Token: %s, Type: %d\n", current->content, current->type);
-// 		current = current->next;
-// 	}
-// 	free_token(shell.tokens);
-// 	free_command(shell.cmds);
-// }
 
 static void check_token(t_token *token, int expected_type, const char *expected_content)
 {
@@ -364,7 +340,7 @@ void	test_expand_all_env_vars(void)
 	env->value = ft_strdup("/home/user");
 	env->next = NULL;
 	tokens = create_token(ft_strdup("$HOME"), ENV);
-	expand_all_env_vars(tokens, env);
+	expand_all_env_vars(tokens, env, 1);
 	// Vérifiez que la variable a été étendue
 	if (strcmp(tokens->content, "/home/user") == 0)
 		printf("Variable étendue: %s\n", tokens->content);

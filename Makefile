@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+         #
+#    By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/03/14 16:35:40 by ilkaddou         ###   ########.fr        #
+#    Updated: 2025/03/14 15:35:42 by ysaadaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,6 @@ BUILTINS_FILES = ./builtins/ft_cd.c \
 	./builtins/ft_export.c \
 	./builtins/ft_pwd.c \
 	./builtins/ft_unset.c \
-	./builtins/builtins_utils.c
 
 PARSING_FILES = ./parsing/parsing.c \
 	./parsing/command_functions.c \

@@ -3,46 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:37:58 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 09:54:30 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/14 15:39:26 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// int	main(int ac, char **av, char **ev)
-// {
-// 	t_shell	*shell;
-// 	t_builtin	*builtins;
-// 	char	*line;
-
-// 	(void)ac;
-// 	(void)av;
-// 	setup_signals();
-// 	shell = init_shell(ev);
-// 	builtins = init_builtins();
-// 	if (!shell)
-// 		return (1);
-// 	while (shell->running)
-// 	{
-// 		line = readline("minishell> ");
-// 		if (line == NULL)
-// 			handle_eof(shell);
-// 		if (ft_strlen(line) > 0)
-// 		{
-// 			add_history(line);
-// 			shell->tokens = lexer(line);
-// 			shell->cmds = parser(shell->tokens);
-// 			execute_commands(shell, builtins);
-// 		}
-// 		free(line);
-// 	}
-// 	free_shell(shell);
-// 	rl_clear_history();
-// 	return (shell->exit_status);
-// }
 
 int	main(int ac, char **av, char **ev)
 {

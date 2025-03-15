@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 13:52:16 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 09:14:46 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/15 15:48:56 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,73 +35,80 @@ int	execute_builtin(t_shell *shell, t_command *cmd, t_builtin *builtins)
 	return (-1);
 }
 
-void	execute_external(t_shell *shell, t_command *cmd, t_env *env)
+void execute_external(t_shell *shell, t_command *cmd, t_env *env)
 {
-	pid_t	pid;
-	char	*path;
+    pid_t   pid;
+    char    *path;
 
-	pid = fork();
-	if (pid == -1)
-	{
-		ft_putstr_fd("Fork failed\n", 2);
-		shell->exit_status = 1;
-		return ;
-	}
-	if (pid == 0)
-	{
-		handle_redirection(cmd);
-		path = find_path(cmd->args[0], env);
-		if (!path || access(path, X_OK) != 0)
-		{
-			ft_putstr_fd("Command not found: ", 2);
-			ft_putstr_fd(cmd->args[0], 2);
-			ft_putstr_fd("\n", 2);
-			free(path);
-			exit(127);
-		}
-		execve(path, cmd->args, env_to_array(env));
-		ft_putstr_fd("Execve failed: ", 2);
-		ft_putstr_fd(cmd->args[0], 2);
-		ft_putstr_fd("\n", 2);
-		free(path);
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		waitpid(pid, &shell->exit_status, 0);
-		if (WIFEXITED(shell->exit_status))
-			shell->exit_status = WEXITSTATUS(shell->exit_status);
-	}
+    g_shell_state = 1;
+    
+    pid = fork();
+    if (pid == -1)
+    {
+        ft_putstr_fd("Fork failed\n", 2);
+        shell->exit_status = 1;
+        g_shell_state = 0;
+        return;
+    }
+    if (pid == 0)
+    {
+        handle_redirection(cmd);
+        path = find_path(cmd->args[0], env);
+        if (!path || access(path, X_OK) != 0)
+        {
+            ft_putstr_fd("Command not found: ", 2);
+            ft_putstr_fd(cmd->args[0], 2);
+            ft_putstr_fd("\n", 2);
+            free(path);
+            exit(127);
+        }
+        execve(path, cmd->args, env_to_array(env));
+        ft_putstr_fd("Execve failed: ", 2);
+        ft_putstr_fd(cmd->args[0], 2);
+        ft_putstr_fd("\n", 2);
+        free(path);
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        waitpid(pid, &shell->exit_status, 0);
+        if (WIFEXITED(shell->exit_status))
+            shell->exit_status = WEXITSTATUS(shell->exit_status);
+        if (g_shell_state == 2)
+            g_shell_state = 0;
+        else
+            g_shell_state = 0;
+    }
 }
 
 void	execute_pipeline(t_shell *shell, t_builtin *builtins)
 {
-	t_command	*cmd;
-	int			pipe_fd[2];
-	int			prev_fd;
-	pid_t		*pids;
-	int			cmd_count;
-	int			i;
-	t_command	*tmp;
-	int			status;
-	char		*path;
+	t_command   *cmd;
+    int         pipe_fd[2];
+    int         prev_fd;
+    pid_t       *pids;
+    int         cmd_count;
+    int         i;
+    int         status;
+    char        *path;
 
-	cmd = shell->cmds;
-	prev_fd = STDIN_FILENO;
-	cmd_count = 0;
-	tmp = cmd;
-	while (tmp)
-	{
-		cmd_count++;
-		tmp = tmp->next;
-	}
-	pids = malloc(sizeof(pid_t) * cmd_count);
-	if (!pids)
-	{
-		ft_putstr_fd("Memory allocation failed\n", 2);
-		return ;
-	}
-	i = 0;
+    cmd = shell->cmds;
+    prev_fd = STDIN_FILENO;
+    cmd_count = 0;
+    t_command *tmp = shell->cmds;
+    while (tmp)
+    {
+        cmd_count++;
+        tmp = tmp->next;
+    }
+    pids = malloc(sizeof(pid_t) * cmd_count);
+    if (!pids)
+    {
+        ft_putstr_fd("Memory allocation failed\n", 2);
+        return ;
+    }
+    i = 0;
+    cmd = shell->cmds;
 	while (cmd)
 	{
 		if (cmd->next && pipe(pipe_fd) == -1)
@@ -165,12 +172,14 @@ void	execute_pipeline(t_shell *shell, t_builtin *builtins)
 		cmd = cmd->next;
 		i++;
 	}
-	for (int j = 0; j < cmd_count; j++)
-	{
-		waitpid(pids[j], &shell->exit_status, 0);
-		if (WIFEXITED(shell->exit_status))
-			shell->exit_status = WEXITSTATUS(shell->exit_status);
-	}
+	i = 0;
+    while (i < cmd_count)
+    {
+        waitpid(pids[i], &shell->exit_status, 0);
+        if (WIFEXITED(shell->exit_status))
+            shell->exit_status = WEXITSTATUS(shell->exit_status);
+        i++;
+    }
 	free(pids);
 }
 
