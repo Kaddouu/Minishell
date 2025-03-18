@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:11 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 14:17:39 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 18:41:51 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,12 +131,19 @@ t_command	*parser(t_token *tokens)
 				free_command(cmds);
 				return (NULL);
 			}
+			
+			// Libérer le heredoc précédent s'il existe
+			if (current_cmd->heredoc)
+				free(current_cmd->heredoc);
+			
 			delimiter = ft_strdup(current->content);
 			if (!delimiter)
 			{
 				free_command(cmds);
 				return (NULL);
 			}
+			
+			// Traitement des guillemets et expansion
 			if (delimiter[0] == '\'' || delimiter[0] == '"')
 			{
 				quote = delimiter[0];

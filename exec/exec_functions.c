@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 13:52:16 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 10:37:27 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 17:49:50 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,10 @@ void execute_pipeline(t_shell *shell, t_builtin *builtins)
         ft_putstr_fd("Memory allocation failed\n", 2);
         return;
     }
+    
+    // Set up signal handlers for pipeline execution
+    g_shell_state = 1;
+    
     i = 0;
     cmd = shell->cmds;
     while (cmd)
@@ -125,6 +129,7 @@ void execute_pipeline(t_shell *shell, t_builtin *builtins)
             shell->exit_status = 1;
             break;
         }
+        
         pids[i] = fork();
         if (pids[i] == -1)
         {
@@ -132,8 +137,12 @@ void execute_pipeline(t_shell *shell, t_builtin *builtins)
             shell->exit_status = 1;
             break;
         }
+        
         if (pids[i] == 0)
         {
+            // Child process
+            
+            // Set up input: either from previous pipe or heredoc
             if (prev_fd != STDIN_FILENO)
             {
                 dup2(prev_fd, STDIN_FILENO);
@@ -147,13 +156,18 @@ void execute_pipeline(t_shell *shell, t_builtin *builtins)
                 close(heredoc_fd);
             }
             
+            // Set up output to next command if we're not the last
             if (cmd->next)
             {
                 close(pipe_fd[0]);
                 dup2(pipe_fd[1], STDOUT_FILENO);
                 close(pipe_fd[1]);
             }
-            handle_redirection(cmd, heredoc_fd);
+            
+            // Handle other redirections (input file, output file, append)
+            handle_redirection(cmd, -1); // Don't pass heredoc_fd as we've already handled it
+            
+            // Execute the command (builtin or external)
             if (is_builtin(cmd->args[0], builtins))
             {
                 status = execute_builtin(shell, cmd, builtins);
@@ -178,20 +192,29 @@ void execute_pipeline(t_shell *shell, t_builtin *builtins)
                 exit(1);
             }
         }
-        // Parent process needs to close heredoc_fd if it was opened
+        
+        // Parent process
+        
+        // Close heredoc fd in parent if it was opened
         if (heredoc_fd != -1)
             close(heredoc_fd);
             
+        // Close previous pipe read end if it was open
         if (prev_fd != STDIN_FILENO)
             close(prev_fd);
+            
+        // Set up for next command
         if (cmd->next)
         {
-            close(pipe_fd[1]);
-            prev_fd = pipe_fd[0];
+            close(pipe_fd[1]); // Close write end
+            prev_fd = pipe_fd[0]; // Save read end for next command
         }
+        
         cmd = cmd->next;
         i++;
     }
+    
+    // Wait for all children to complete
     i = 0;
     while (i < cmd_count)
     {
@@ -200,6 +223,8 @@ void execute_pipeline(t_shell *shell, t_builtin *builtins)
             shell->exit_status = WEXITSTATUS(shell->exit_status);
         i++;
     }
+    
+    g_shell_state = 0;
     free(pids);
 }
 
@@ -214,30 +239,28 @@ void execute_commands(t_shell *shell, t_builtin *builtins)
     if (!cmd || !cmd->args || !cmd->args[0])
         return;
 
-    heredoc_fd = -1;
-    if (cmd->heredoc)
-        heredoc_fd = handle_heredoc(shell, cmd);
-
-    if (cmd->next)
+    if (cmd->next) // Multiple commands (pipeline)
     {
-        if (heredoc_fd != -1)
-            close(heredoc_fd);
         execute_pipeline(shell, builtins);
     }
-    else
+    else // Single command
     {
+        heredoc_fd = -1;
+        if (cmd->heredoc)
+            heredoc_fd = handle_heredoc(shell, cmd);
+            
         saved_stdin = dup(STDIN_FILENO);
         saved_stdout = dup(STDOUT_FILENO);
 
         if (is_builtin(cmd->args[0], builtins))
         {
-            // For builtins, we need to handle redirection in the current process
+            // For builtins, handle redirection in the current process
             if (heredoc_fd != -1)
             {
                 dup2(heredoc_fd, STDIN_FILENO);
                 close(heredoc_fd);
             }
-            handle_redirection(cmd, -1); // Don't pass heredoc_fd as it's already set
+            handle_redirection(cmd, -1); // Don't pass heredoc_fd as it's already handled
             shell->exit_status = execute_builtin(shell, cmd, builtins);
         }
         else
@@ -246,6 +269,7 @@ void execute_commands(t_shell *shell, t_builtin *builtins)
             execute_external(shell, cmd, shell->env, heredoc_fd);
         }
 
+        // Restore standard input/output
         dup2(saved_stdin, STDIN_FILENO);
         dup2(saved_stdout, STDOUT_FILENO);
         close(saved_stdin);
