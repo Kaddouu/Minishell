@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:13 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 14:32:53 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:55:05 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ static int is_valid_env_name(char *str)
 {
     int i;
 
-    if (!str || !str[0] || ft_isdigit(str[0])) // Key can't start with digit or be empty
+    if (!str || !str[0] || ft_isdigit(str[0]))
         return (0);
     i = 0;
-    while (str[i] && str[i] != '=') // Only validate up to '='
+    while (str[i] && str[i] != '=')
     {
         if (!ft_isalnum(str[i]) && str[i] != '_')
             return (0);
@@ -88,8 +88,8 @@ int ft_export(char **args, t_shell *shell)
         if (equals)
         {
             key = ft_substr(args[i], 0, equals - args[i]);
-            value = ft_strdup(equals + 1); // Value can be anything, including $
-            if (!is_valid_env_name(key)) // Only validate key
+            value = ft_strdup(equals + 1);
+            if (!is_valid_env_name(key))
             {
                 ft_putstr_fd("minishell: export: `", 2);
                 ft_putstr_fd(key, 2);
@@ -100,7 +100,6 @@ int ft_export(char **args, t_shell *shell)
             }
             else
             {
-                // Remove quotes from value if present (optional, for consistency)
                 if (value[0] == '"' && value[ft_strlen(value) - 1] == '"')
                 {
                     char *temp = ft_substr(value, 1, ft_strlen(value) - 2);

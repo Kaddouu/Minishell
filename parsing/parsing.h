@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 15:40:26 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 14:18:01 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:52:48 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,16 @@ void					expand_all_env_vars(t_token *tokens, t_env *env,
 int						handle_input(t_shell *shell, char *line);
 void					handle_word(t_token **tokens, t_token **last,
 							char **ptr);
-// int						handle_quotes(t_token **tokens, t_token **last,
-// 							char **ptr);
-char *get_quoted_string(char **ptr, t_env *env, int exit_status);
+char					*get_quoted_string(char **ptr, t_env *env,
+							int exit_status);
 
-void handle_argument(t_token **tokens, t_token **last, char **ptr, t_env *env, int exit_status);
+void					handle_argument(t_token **tokens, t_token **last,
+							char **ptr, t_env *env, int exit_status);
 void					handle_env_var(t_token **tokens, t_token **last,
 							char **ptr);
 
 // Fonctions de tokenisation
-t_token *lexer(char *input, t_env *env, int exit_status);
+t_token					*lexer(char *input, t_env *env, int exit_status);
 t_token					*create_token(char *content, t_type type);
 void					add_token(t_token **tokens, t_token **last,
 							t_token *new_token);
