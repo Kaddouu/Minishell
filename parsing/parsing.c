@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:11 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 13:32:18 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:17:39 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	handle_input(t_shell *shell, char *line)
 		return (-1);
 	if (ft_strcmp(line, "exit") == 0)
 		return (-1);
-	shell->tokens = lexer(line);
+	shell->tokens = lexer(line, shell->env, shell->exit_status);
 	if (!shell->tokens)
 		return (0);
 	expand_all_env_vars(shell->tokens, shell->env, shell->exit_status);

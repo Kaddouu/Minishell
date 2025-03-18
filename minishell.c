@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:37:58 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 15:39:26 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:17:22 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int ac, char **av, char **ev)
 		if (ft_strlen(line) > 0)
 		{
 			add_history(line);
-			shell->tokens = lexer(line);
+			shell->tokens = lexer(line, shell->env, shell->exit_status);
 			if (shell->tokens)
 			{
 				expand_all_env_vars(shell->tokens, shell->env,
