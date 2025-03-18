@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:14:03 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/15 17:03:27 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/18 10:34:51 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,88 +26,80 @@ int	is_builtin(char *cmd, t_builtin *builtins)
 	return (0);
 }
 
-void	handle_redirection(t_command *cmd)
+void handle_redirection(t_command *cmd, int heredoc_fd)
 {
-	int	fd;
-	int	pipe_fd[2];
+    int fd;
 
-	if (cmd->output)
-	{
-		fd = open(cmd->output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd < 0)
-		{
-			ft_putstr_fd("Redirection failed: ", 2);
-			ft_putstr_fd(cmd->output, 2);
-			ft_putstr_fd("\n", 2);
-			exit(1);
-		}
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
-	if (cmd->append)
-	{
-		fd = open(cmd->append, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd < 0)
-		{
-			ft_putstr_fd("Redirection failed: ", 2);
-			ft_putstr_fd(cmd->append, 2);
-			ft_putstr_fd("\n", 2);
-			exit(1);
-		}
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
-	if (cmd->input)
-	{
-		fd = open(cmd->input, O_RDONLY);
-		if (fd < 0)
-		{
-			ft_putstr_fd("Redirection failed: ", 2);
-			ft_putstr_fd(cmd->input, 2);
-			ft_putstr_fd("\n", 2);
-			exit(1);
-		}
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-	}
-	if (cmd->heredoc)
-	{
-		if (pipe(pipe_fd) == -1)
-		{
-			ft_putstr_fd("Pipe failed for heredoc\n", 2);
-			exit(1);
-		}
-		dup2(pipe_fd[0], STDIN_FILENO);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-	}
+    if (cmd->input && heredoc_fd == -1)
+    {
+        fd = open(cmd->input, O_RDONLY);
+        if (fd < 0)
+        {
+            ft_putstr_fd("Redirection failed: ", 2);
+            ft_putstr_fd(cmd->input, 2);
+            ft_putstr_fd("\n", 2);
+            exit(1);
+        }
+        dup2(fd, STDIN_FILENO);
+        close(fd);
+    }
+    else if (heredoc_fd != -1)
+    {
+        dup2(heredoc_fd, STDIN_FILENO);
+        close(heredoc_fd);
+    }
+    if (cmd->output)
+    {
+        fd = open(cmd->output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (fd < 0)
+        {
+            ft_putstr_fd("Redirection failed: ", 2);
+            ft_putstr_fd(cmd->output, 2);
+            ft_putstr_fd("\n", 2);
+            exit(1);
+        }
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+    }
+    if (cmd->append)
+    {
+        fd = open(cmd->append, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        if (fd < 0)
+        {
+            ft_putstr_fd("Redirection failed: ", 2);
+            ft_putstr_fd(cmd->append, 2);
+            ft_putstr_fd("\n", 2);
+            exit(1);
+        }
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+    }
 }
 
-void	handle_heredoc(t_shell *shell, t_command *cmd)
+int handle_heredoc(t_shell *shell, t_command *cmd)
 {
-	int		pipe_fd[2];
-	char	*line;
+    int     pipe_fd[2];
+    char    *line;
 
-	if (!cmd->heredoc)
-		return ;
-	if (pipe(pipe_fd) == -1)
-	{
-		ft_putstr_fd("Pipe failed for heredoc\n", 2);
-		shell->exit_status = 1;
-		return ;
-	}
-	while ((line = readline("> ")) && ft_strcmp(line, cmd->heredoc) != 0)
-	{
-		if (cmd->expand_heredoc)
-			line = expand_variables(line, shell->env);
-		ft_putstr_fd(line, pipe_fd[1]);
-		ft_putchar_fd('\n', pipe_fd[1]);
-		free(line);
-	}
-	free(line);
-	close(pipe_fd[1]);
-	dup2(pipe_fd[0], STDIN_FILENO);
-	close(pipe_fd[0]);
+    if (!cmd->heredoc)
+        return (-1);
+    if (pipe(pipe_fd) == -1)
+    {
+        ft_putstr_fd("Pipe failed for heredoc\n", 2);
+        shell->exit_status = 1;
+        return (-1);
+    }
+    while ((line = readline("> ")) && ft_strcmp(line, cmd->heredoc) != 0)
+    {
+        if (cmd->expand_heredoc)
+            line = expand_variables(line, shell->env);
+        ft_putstr_fd(line, pipe_fd[1]);
+        ft_putchar_fd('\n', pipe_fd[1]);
+        free(line);
+    }
+    free(line);
+    close(pipe_fd[1]);
+    return (pipe_fd[0]);
 }
 
 char	*find_path(char *cmd, t_env *env)
