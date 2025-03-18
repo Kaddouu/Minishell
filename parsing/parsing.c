@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:11 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 09:29:17 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:32:18 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_command	*parser(t_token *tokens)
 					&& !current_cmd->input && !current_cmd->output
 					&& !current_cmd->heredoc && !current_cmd->append))
 			{
-				printf("Erreur : pipe sans commande\n");
+				printf(" syntax error near unexpected token `|'\n");
 				free_command(cmds);
 				return (NULL);
 			}
@@ -93,7 +93,7 @@ t_command	*parser(t_token *tokens)
 			current = current->next;
 			if (!current || current->type != WORD)
 			{
-				printf("Erreur : redirection d'entrée sans fichier\n");
+				// printf("Erreur : redirection d'entrée sans fichier\n");
 				free_command(cmds);
 				return (NULL);
 			}

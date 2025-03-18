@@ -6,7 +6,7 @@
 #    By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/03/18 09:59:11 by ilkaddou         ###   ########.fr        #
+#    Updated: 2025/03/18 12:35:54 by ilkaddou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,8 +46,8 @@ OBJS = $(SRCS:.c=.o)
 LIBFT_DIR = Libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra -g
 
 # Détecter le système d'exploitation
 UNAME := $(shell uname)

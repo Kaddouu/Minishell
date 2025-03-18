@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:28:15 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 12:33:18 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:51:34 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ void	handle_word(t_token **tokens, t_token **last, char **ptr)
 		&& **ptr != '>' && **ptr != '\'' && **ptr != '"' && **ptr != '$')
 		(*ptr)++;
 	word = ft_substr(start, 0, *ptr - start);
+	if (!word)
+		return ;
 	add_token(tokens, last, create_token(word, WORD));
 }
 

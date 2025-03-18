@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 10:14:32 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:38:20 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	ft_echo(char **args, t_shell *shell)
 	while (args[i])
 	{
 		ft_putstr_fd(args[i], 1);
-		if (args[i + 1])
+		if (args[i + 1] && args[i][0] != '\'')
 			ft_putstr_fd(" ", 1);
 		i++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:13 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 12:40:22 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 12:31:36 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ static void	add_or_update_env(t_env **env, char *key, char *value)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
-			printf("Updated env: %s=%s\n", key, value);
 			return ;
 		}
 		current = current->next;
@@ -65,10 +64,13 @@ static void	add_or_update_env(t_env **env, char *key, char *value)
 	if (!new_node)
 		return ;
 	new_node->key = ft_strdup(key);
+	if (!new_node->key)
+		return ;
 	new_node->value = ft_strdup(value);
+	if (!new_node->value)
+		return ;
 	new_node->next = *env;
 	*env = new_node;
-	printf("Added env: %s=%s\n", key, value);
 }
 
 int	ft_export(char **args, t_shell *shell)

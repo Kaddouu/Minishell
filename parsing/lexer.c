@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:30:13 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/14 09:57:30 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 13:50:28 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_token *lexer(char *input)
 			add_token(&tokens, &last, create_token(ft_strdup(">"), REDIR_OUT));
 			ptr++;
 		}
-		else if (*ptr == '$')
+		else if (*ptr == '$' && *(ptr + 1))
 			handle_env_var(&tokens, &last, &ptr);
 		else if (*ptr == '\'' || *ptr == '"' || *ptr == '\'')
 		{
