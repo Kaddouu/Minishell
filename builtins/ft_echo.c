@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 13:38:20 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/18 15:30:18 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	ft_echo(char **args, t_shell *shell)
 	int	i;
 	int	newline;
 
+	(void)shell;
 	newline = 1;
 	i = 1;
 	while (args[i] && is_flag_n(args[i]))
@@ -38,22 +39,10 @@ int	ft_echo(char **args, t_shell *shell)
 		newline = 0;
 		i++;
 	}
-	if (args[i] && ft_strcmp(args[i], "$?") == 0)
-	{
-		ft_putstr_fd(ft_itoa(shell->exit_status), 1);
-		if (args[++i])
-			ft_putstr_fd(" ", 1);
-		else
-		{
-			if (newline)
-				ft_putstr_fd("\n", 1);
-			return (0);
-		}
-	}
 	while (args[i])
 	{
 		ft_putstr_fd(args[i], 1);
-		if (args[i + 1] && args[i][0] != '\'')
+		if (args[i + 1])
 			ft_putstr_fd(" ", 1);
 		i++;
 	}
