@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+         #
+#    By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/03/19 15:29:21 by ilkaddou         ###   ########.fr        #
+#    Updated: 2025/03/19 22:20:08 by ilkaddou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ EXEC_FILES = ./exec/cmd_exec.c \
 SRCS = minishell.c \
 	minishell_init.c \
 	free_functions.c \
+	free_commands.c \
 	signals.c \
 	$(BUILTINS_FILES) \
 	$(PARSING_FILES) \
