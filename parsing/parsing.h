@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 15:40:26 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 14:52:48 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 09:18:55 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_command
 	char				*append;
 	int					expand_heredoc;
 	struct s_command	*next;
+	struct s_shell		*shell;
 }						t_command;
 
 // STRUCTURE CENTRALE DU SHELL

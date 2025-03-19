@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:28:15 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 14:56:14 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 10:17:15 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,32 +41,32 @@ void	add_token(t_token **tokens, t_token **last, t_token *new_token)
 	}
 }
 
-void	handle_env_var(t_token **tokens, t_token **last, char **ptr)
+void handle_env_var(t_token **tokens, t_token **last, char **ptr)
 {
-	char	*start;
-	char	*var_name;
+    char *start;
+    char *var_name;
 
-	(*ptr)++;
-	if (**ptr == '?' || ft_isalnum(**ptr) || **ptr == '_')
-	{
-		if (**ptr == '?')
-		{
-			var_name = ft_strdup("?");
-			(*ptr)++;
-		}
-		else
-		{
-			start = *ptr;
-			while (**ptr && (ft_isalnum(**ptr) || **ptr == '_'))
-				(*ptr)++;
-			var_name = ft_substr(start, 0, *ptr - start);
-		}
-		add_token(tokens, last, create_token(var_name, ENV));
-	}
-	else
-	{
-		add_token(tokens, last, create_token(ft_strdup("$"), WORD));
-	}
+    (*ptr)++;
+    if (**ptr == '?' || ft_isalnum(**ptr) || **ptr == '_')
+    {
+        if (**ptr == '?')
+        {
+            var_name = ft_strdup("?");
+            (*ptr)++;
+        }
+        else
+        {
+            start = *ptr;
+            while (**ptr && (ft_isalnum(**ptr) || **ptr == '_'))
+                (*ptr)++;
+            var_name = ft_substr(start, 0, *ptr - start);
+        }
+        add_token(tokens, last, create_token(var_name, ENV));
+    }
+    else
+    {
+        add_token(tokens, last, create_token(ft_strdup("$"), WORD));
+    }
 }
 
 void	handle_word(t_token **tokens, t_token **last, char **ptr)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:11:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 17:21:43 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 09:30:29 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void							handle_sigint(int sig);
 void							handle_eof(t_shell *shell);
 // void		handle_redirection(t_command *cmd);
 void							handle_redirection(t_command *cmd,
-									int heredoc_fd);
+									int heredoc_fd, t_shell *shell);
 // void		handle_heredoc(t_shell *shell, t_command *cmd);
 int								handle_heredoc(t_shell *shell, t_command *cmd);
 

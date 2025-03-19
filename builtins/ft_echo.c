@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:49:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 15:30:18 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 09:45:59 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,5 @@ int	ft_echo(char **args, t_shell *shell)
 	}
 	if (newline)
 		ft_putstr_fd("\n", 1);
-	return (0);
+	return (shell->exit_status);
 }
