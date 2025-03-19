@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:14:03 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/19 09:58:23 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:02:41 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ int	handle_heredoc(t_shell *shell, t_command *cmd)
 	char	*line;
 	char	*expanded_line;
 
-	int found_last_delimiter = 0; // Nouveau flag
 	if (!cmd->heredoc)
 		return (-1);
 	if (pipe(pipe_fd) == -1)
@@ -101,19 +100,11 @@ int	handle_heredoc(t_shell *shell, t_command *cmd)
 				2);
 			break ;
 		}
-		// Vérifier si la ligne est le dernier délimiteur
 		if (ft_strcmp(line, cmd->heredoc) == 0)
 		{
 			free(line);
 			break ;
 		}
-		// Si le dernier délimiteur n'a pas été trouvé, ignorer les lignes
-		if (!found_last_delimiter)
-		{
-			free(line);
-			continue ;
-		}
-		// Traitement de la ligne (expansion des variables)
 		if (cmd->expand_heredoc)
 		{
 			expanded_line = expand_variables(line, shell->env);
@@ -142,7 +133,6 @@ char	*find_path(char *cmd, t_env *env)
 	int		i;
 	char	*full_path;
 
-	// If command contains a slash, it's a direct path
 	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
 	path = find_env_var(env, "PATH");

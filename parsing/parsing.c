@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 14:52:11 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/19 09:36:01 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 11:25:18 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ t_command	*parser(t_token *tokens)
 			current = current->next;
 			if (!current || current->type != WORD)
 			{
-				// printf("Erreur : redirection d'entrée sans fichier\n");
 				free_command(cmds);
 				return (NULL);
 			}
@@ -132,7 +131,6 @@ t_command	*parser(t_token *tokens)
 				return (NULL);
 			}
 			
-			// Libérer le heredoc précédent s'il existe
 			if (current_cmd->heredoc)
 				free(current_cmd->heredoc);
 			

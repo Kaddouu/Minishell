@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 15:40:26 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/19 09:18:55 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:26:42 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,21 @@ typedef struct s_shell
 	int					exit_status;
 	int					running;
 }						t_shell;
+
+typedef struct s_pipeline_data
+{
+	int prev_fd;    // Descripteur de fichier précédent
+	int pipe_fd[2]; // Descripteurs pour le pipe actuel
+	pid_t *pids;    // Tableau des PIDs des processus
+}						t_pipeline_data;
+
+typedef struct s_exec_data
+{
+	t_shell *shell;             // Contexte du shell
+	struct s_builtin *builtins; // Fonctions builtins
+	t_pipeline_data *pipeline;  // Données du pipeline
+	int index;                  // Indice de la commande courante
+}						t_exec_data;
 
 // Fonctions utilitaires
 char					*expand_variables(char *str, t_env *env);

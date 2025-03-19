@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:11:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/19 09:30:29 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 14:24:00 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 # include "./Libft/libft.h"
 # include "./builtins/builtins.h"
 # include "./parsing/parsing.h"
-# include <stdio.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -35,15 +35,26 @@ t_env							*init_env(char **envp);
 t_shell							*init_shell(char **envp);
 
 // Fonction d'exécution
-// void		execute_commands(t_shell *shell, t_builtin *builtins);
-void							execute_commands(t_shell *shell,
-									t_builtin *builtins);
-void							execute_pipeline(t_shell *shell,
+
+int								count_commands(t_command *cmd);
+void							handle_command_execution(t_command *cmd,
+									t_exec_data *exec_data);
+int								execute_builtin(t_shell *shell, t_command *cmd,
 									t_builtin *builtins);
 void							execute_external(t_shell *shell, t_command *cmd,
 									t_env *env, int heredoc_fd);
-// void		execute_external(t_shell *shell, t_command *cmd, t_env *env);
-int								execute_builtin(t_shell *shell, t_command *cmd,
+int								handle_heredoc_for_pipeline(t_shell *shell,
+									t_command *cmd);
+void							setup_fds_for_command(int prev_fd,
+									int heredoc_fd, int *pipe_fd,
+									t_command *cmd);
+void							execute_single_command(t_shell *shell,
+									t_command *cmd, t_builtin *builtins);
+void							execute_pipeline(t_shell *shell,
+									t_builtin *builtins);
+void							execute_single_cmd(t_shell *shell,
+									t_command *cmd, t_builtin *builtins);
+void							execute_commands(t_shell *shell,
 									t_builtin *builtins);
 
 // Fonctions utilitaires
