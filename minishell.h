@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:11:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/19 15:26:51 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 21:56:53 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,9 @@ void							handle_pipeline_command(t_shell *shell,
 									t_command *cmd, t_builtin *builtins,
 									t_exec_data *exec_data);
 int								count_commands(t_command *cmd);
-void							setup_pipeline_fds(int prev_fd, int heredoc_fd,
-									int *pipe_fd, t_command *cmd);
+void    						setup_pipeline_fds(int prev_fd, int *pipe_fd,
+									t_command *cmd);
+
 void							setup_pipe(int *pipe_fd, t_shell *shell);
 void							manage_pipe_fds(int *prev_fd, int *pipe_fd,
 									t_command *cmd);

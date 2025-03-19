@@ -3,51 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:12:45 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/03/19 15:31:42 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 22:14:25 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 void	execute_in_child(t_shell *shell, t_command *cmd, t_builtin *builtins,
-		t_exec_data *exec_data)
+	t_exec_data *exec_data)
 {
 	char	*path;
 	int		status;
 
 	setup_pipeline_fds(exec_data->pipeline->prev_fd,
-		exec_data->pipeline->pipe_fd[0], exec_data->pipeline->pipe_fd, cmd);
+		exec_data->pipeline->pipe_fd, cmd);
 	handle_redirection(cmd, -1, shell);
 	if (is_builtin(cmd->args[0], builtins))
 	{
 		status = execute_builtin(shell, cmd, builtins);
 		exit(status);
 	}
-	else
+	path = find_path(cmd->args[0], shell->env);
+	if (!path || access(path, X_OK) != 0)
 	{
-		path = find_path(cmd->args[0], shell->env);
-		if (!path || access(path, X_OK) != 0)
-		{
-			ft_putstr_fd("Command not found: ", 2);
-			ft_putstr_fd(cmd->args[0], 2);
-			ft_putstr_fd("\n", 2);
-			free(path);
-			exit(127);
-		}
-		execve(path, cmd->args, env_to_array(shell->env));
-		ft_putstr_fd("Execve failed: ", 2);
-		ft_putstr_fd(cmd->args[0], 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd("Command not found: ", 2);
+		ft_putendl_fd(cmd->args[0], 2);
 		free(path);
-		exit(1);
+		exit(127);
 	}
+	execve(path, cmd->args, env_to_array(shell->env));
+	ft_putstr_fd("Execve failed: ", 2);
+	ft_putendl_fd(cmd->args[0], 2);
+	free(path);
+	exit(1);
 }
 
 void	handle_pipeline_command(t_shell *shell, t_command *cmd,
-		t_builtin *builtins, t_exec_data *exec_data)
+	t_builtin *builtins, t_exec_data *exec_data)
 {
 	int	heredoc_fd;
 
@@ -73,6 +68,26 @@ void	handle_pipeline_command(t_shell *shell, t_command *cmd,
 		cmd);
 }
 
+void	init_pipeline_execution(t_shell *shell, t_pipeline_data *pipeline,
+	t_exec_data *exec_data, t_builtin *builtins)
+{
+	int	cmd_count;
+
+	cmd_count = count_commands(shell->cmds);
+	pipeline->pids = malloc(sizeof(pid_t) * cmd_count);
+	if (!pipeline->pids)
+	{
+		ft_putstr_fd("Memory allocation failed\n", 2);
+		return ;
+	}
+	pipeline->prev_fd = STDIN_FILENO;
+	g_shell_state = 1;
+	exec_data->shell = shell;
+	exec_data->builtins = builtins;
+	exec_data->pipeline = pipeline;
+	exec_data->index = 0;
+}
+
 void	execute_pipeline(t_shell *shell, t_builtin *builtins)
 {
 	t_exec_data		exec_data;
@@ -81,18 +96,9 @@ void	execute_pipeline(t_shell *shell, t_builtin *builtins)
 	int				cmd_count;
 
 	cmd_count = count_commands(shell->cmds);
-	pipeline.pids = malloc(sizeof(pid_t) * cmd_count);
+	init_pipeline_execution(shell, &pipeline, &exec_data, builtins);
 	if (!pipeline.pids)
-	{
-		ft_putstr_fd("Memory allocation failed\n", 2);
 		return ;
-	}
-	pipeline.prev_fd = STDIN_FILENO;
-	g_shell_state = 1;
-	exec_data.shell = shell;
-	exec_data.builtins = builtins;
-	exec_data.pipeline = &pipeline;
-	exec_data.index = 0;
 	cmd = shell->cmds;
 	while (cmd)
 	{

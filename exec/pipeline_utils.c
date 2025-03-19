@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:09:18 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/03/19 15:29:54 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/19 22:04:25 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,12 @@ int	count_commands(t_command *cmd)
 	return (count);
 }
 
-void	setup_pipeline_fds(int prev_fd, int heredoc_fd, int *pipe_fd,
-		t_command *cmd)
+void	setup_pipeline_fds(int prev_fd, int *pipe_fd, t_command *cmd)
 {
 	if (prev_fd != STDIN_FILENO)
 	{
 		dup2(prev_fd, STDIN_FILENO);
 		close(prev_fd);
-	}
-	if (heredoc_fd != -1)
-	{
-		dup2(heredoc_fd, STDIN_FILENO);
-		close(heredoc_fd);
 	}
 	if (cmd->next)
 	{
