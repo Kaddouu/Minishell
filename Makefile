@@ -6,7 +6,7 @@
 #    By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/03/19 12:20:42 by ilkaddou         ###   ########.fr        #
+#    Updated: 2025/03/19 15:29:21 by ilkaddou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,14 @@ PARSING_FILES = ./parsing/parsing.c \
 	./parsing/lexer.c \
 	./parsing/lexer_utils.c
 
-EXEC_FILES = ./exec/exec_functions.c \
-	./exec/exec_utils.c
+EXEC_FILES = ./exec/cmd_exec.c \
+	./exec/env_utils.c \
+	./exec/exec_utils.c \
+	./exec/heredoc_utils.c \
+	./exec/pipeline_exec.c \
+	./exec/pipeline_utils.c \
+	./exec/redirection_utils.c \
+#	./exec/exec_functions.c
 
 SRCS = minishell.c \
 	minishell_init.c \
