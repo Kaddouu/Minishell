@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:00:00 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/03/20 11:29:22 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:13:08 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,26 @@ static char	*extract_var_name(char **ptr)
 	return (var_name);
 }
 
-static char	*get_var_value(char *var_name, t_env *env, int exit_status)
+static char	*get_var_value(char *var_name, t_env *env)
 {
 	t_env	*var;
 	char	*var_value;
 
 	if (ft_strcmp(var_name, "?") == 0)
-		var_value = ft_itoa(exit_status);
+		var_value = ft_itoa(env->shell->exit_status);
 	else
 	{
 		var = find_env_var(env, var_name);
-		var_value = var ? ft_strdup(var->value) : ft_strdup("");
+		if (var)
+			var_value = ft_strdup(var->value);
+		else
+			var_value = ft_strdup("");
 	}
 	return (var_value);
 }
 
-static char	*process_dollar_in_quotes(char **ptr, t_env *env, int exit_status,
-		char **start, char *content)
+static char	*process_dollar_in_quotes(char **ptr, t_env *env, char **start,
+		char *content)
 {
 	char	*var_name;
 	char	*var_value;
@@ -67,7 +70,7 @@ static char	*process_dollar_in_quotes(char **ptr, t_env *env, int exit_status,
 	if (**ptr == '?' || ft_isalnum(**ptr) || **ptr == '_')
 	{
 		var_name = extract_var_name(ptr);
-		var_value = get_var_value(var_name, env, exit_status);
+		var_value = get_var_value(var_name, env);
 		free(var_name);
 		new_content = ft_strjoin(content, var_value);
 		free(content);
@@ -84,7 +87,7 @@ static char	*process_dollar_in_quotes(char **ptr, t_env *env, int exit_status,
 	return (content);
 }
 
-char	*get_quoted_string(char **ptr, t_env *env, int exit_status)
+char	*get_quoted_string(char **ptr, t_env *env)
 {
 	char	quote;
 	char	*start;
@@ -99,8 +102,7 @@ char	*get_quoted_string(char **ptr, t_env *env, int exit_status)
 	while (**ptr && **ptr != quote)
 	{
 		if (quote == '"' && **ptr == '$')
-			content = process_dollar_in_quotes(ptr, env, exit_status, &start,
-					content);
+			content = process_dollar_in_quotes(ptr, env, &start, content);
 		else
 			(*ptr)++;
 	}

@@ -6,66 +6,62 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:00:00 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/03/20 11:52:36 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:13:22 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	is_token_delimiter(char c)
+static char	*extract_var_name(t_lexer_context *lexer)
 {
-	return (ft_isspace(c) || c == '|' || c == '<' || c == '>');
-}
+	char	*var_name;
+	char	*var_start;
 
-static char	*handle_quoted_part(char **ptr, t_env *env, int exit_status,
-					char *argument)
-{
-	char	*quoted;
-	char	*temp;
-
-	quoted = get_quoted_string(ptr, env, exit_status);
-	if (!quoted)
+	if (**lexer->ptr == '?')
 	{
-		free(argument);
-		return (NULL);
+		var_name = ft_strdup("?");
+		(*lexer->ptr)++;
 	}
-	temp = ft_strjoin(argument, quoted);
-	free(argument);
-	free(quoted);
-	return (temp);
+	else
+	{
+		var_start = *lexer->ptr;
+		while (**lexer->ptr && (ft_isalnum(**lexer->ptr)
+				|| **lexer->ptr == '_'))
+			(*lexer->ptr)++;
+		var_name = ft_substr(var_start, 0, *lexer->ptr - var_start);
+	}
+	return (var_name);
 }
 
-static char	*handle_dollar_var(char **ptr, t_env *env,char *argument)
+static char	*get_variable_value(t_lexer_context *lexer, char *var_name)
+{
+	char	*var_value;
+	t_env	*var;
+
+	if (ft_strcmp(var_name, "?") == 0)
+		var_value = ft_itoa(lexer->exit_status);
+	else
+	{
+		var = find_env_var(lexer->env, var_name);
+		if (var)
+			var_value = ft_strdup(var->value);
+		else
+			var_value = ft_strdup("");
+	}
+	return (var_value);
+}
+
+static char	*handle_dollar_var(t_lexer_context *lexer, char *argument)
 {
 	char	*var_name;
 	char	*var_value;
 	char	*temp;
 
-	(*ptr)++;
-	if (**ptr == '?' || ft_isalnum(**ptr) || **ptr == '_')
+	(*lexer->ptr)++;
+	if (**lexer->ptr == '?' || ft_isalnum(**lexer->ptr) || **lexer->ptr == '_')
 	{
-		if (**ptr == '?')
-		{
-			var_name = ft_strdup("?");
-			(*ptr)++;
-		}
-		else
-		{
-			char *var_start = *ptr;
-			while (**ptr && (ft_isalnum(**ptr) || **ptr == '_'))
-				(*ptr)++;
-			var_name = ft_substr(var_start, 0, *ptr - var_start);
-		}
-		if (ft_strcmp(var_name, "?") == 0)
-			var_value = ft_itoa(env->shell->exit_status);
-		else
-		{
-			t_env *var = find_env_var(env, var_name);
-			if (var)
-				var_value = ft_strdup(var->value);
-			else
-				var_value = ft_strdup("");
-		}
+		var_name = extract_var_name(lexer);
+		var_value = get_variable_value(lexer, var_name);
 		free(var_name);
 		temp = ft_strjoin(argument, var_value);
 		return (free(argument), free(var_value), temp);
@@ -73,45 +69,46 @@ static char	*handle_dollar_var(char **ptr, t_env *env,char *argument)
 	return (argument);
 }
 
-static char	*handle_normal_text(char **ptr, char *argument)
+static char	*handle_normal_text(t_lexer_context *lexer, char *argument)
 {
 	char	*start;
 	char	*word;
 	char	*temp;
 
-	start = *ptr;
-	while (**ptr && !is_token_delimiter(**ptr) &&
-		!(**ptr == '$' && (*(*ptr + 1) == '?' || ft_isalnum(*(*ptr + 1))
-				|| *(*ptr + 1) == '_')) && **ptr != '\'' && **ptr != '"')
-		(*ptr)++;
-	word = ft_substr(start, 0, *ptr - start);
+	start = *lexer->ptr;
+	while (**lexer->ptr && !ft_isspace(**lexer->ptr) && **lexer->ptr != '|'
+		&& **lexer->ptr != '<' && **lexer->ptr != '>' && !(**lexer->ptr == '$'
+			&& ((*(*lexer->ptr + 1) == '?' || ft_isalnum(*(*lexer->ptr + 1))
+					|| *(*lexer->ptr + 1) == '_'))) && **lexer->ptr != '\''
+		&& **lexer->ptr != '"')
+		(*lexer->ptr)++;
+	word = ft_substr(start, 0, *lexer->ptr - start);
 	temp = ft_strjoin(argument, word);
 	free(argument);
 	free(word);
 	return (temp);
 }
 
-void	handle_argument(t_token **tokens, t_token **last, char **ptr,
-		t_env *env, int exit_status)
+void	handle_argument(t_lexer_context *lexer)
 {
 	char	*argument;
 
 	argument = ft_strdup("");
-	while (**ptr && !is_token_delimiter(**ptr))
+	while (**lexer->ptr && !ft_isspace(**lexer->ptr) && **lexer->ptr != '|'
+		&& **lexer->ptr != '<' && **lexer->ptr != '>')
 	{
-		if (**ptr == '\'' || **ptr == '"')
-			argument = handle_quoted_part(ptr, env, exit_status, argument);
-		else if (**ptr == '$' && (*(*ptr + 1) == '?' || ft_isalnum(*(*ptr + 1))
-				|| *(*ptr + 1) == '_'))
-			argument = handle_dollar_var(ptr, env, argument);
+		if (**lexer->ptr == '\'' || **lexer->ptr == '"')
+			argument = handle_quoted_part(lexer, argument);
+		else if (**lexer->ptr == '$' && (*(*lexer->ptr + 1) == '?'
+				|| ft_isalnum(*(*lexer->ptr + 1)) || *(*lexer->ptr + 1) == '_'))
+			argument = handle_dollar_var(lexer, argument);
 		else
-			argument = handle_normal_text(ptr, argument);
-		
+			argument = handle_normal_text(lexer, argument);
 		if (!argument)
 			return ;
 	}
 	if (argument && *argument)
-		add_token(tokens, last, create_token(argument, WORD));
+		add_token(lexer->tokens, lexer->last, create_token(argument, WORD));
 	else
 		free(argument);
 }

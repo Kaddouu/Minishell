@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:28:15 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/19 22:37:14 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:09:27 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,23 @@ void	handle_env_var(t_token **tokens, t_token **last, char **ptr)
 	}
 	else
 		add_token(tokens, last, create_token(ft_strdup("$"), WORD));
+}
+
+char	*handle_quoted_part(t_lexer_context *lexer, char *argument)
+{
+	char	*quoted;
+	char	*temp;
+
+	quoted = get_quoted_string(lexer->ptr, lexer->env);
+	if (!quoted)
+	{
+		free(argument);
+		return (NULL);
+	}
+	temp = ft_strjoin(argument, quoted);
+	free(argument);
+	free(quoted);
+	return (temp);
 }
 
 void	handle_word(t_token **tokens, t_token **last, char **ptr)

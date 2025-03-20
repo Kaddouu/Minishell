@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/28 15:40:26 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/20 11:51:54 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:13:35 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,34 +80,61 @@ typedef struct s_exec_data
 	int					index;
 }						t_exec_data;
 
+typedef struct s_lexer_context
+{
+	t_token				**tokens;
+	t_token				**last;
+	char				**ptr;
+	t_env				*env;
+	int					exit_status;
+}						t_lexer_context;
+
+typedef struct s_parser_context
+{
+	t_token				**current;
+	t_command			**current_cmd;
+	t_command			**cmds;
+}						t_parser_context;
+
 // Fonctions utilitaires
 char					*expand_variables(char *str, t_env *env);
 t_env					*find_env_var(t_env *env, char *var_name);
 void					expand_all_env_vars(t_token *tokens, t_env *env,
 							int exit_status);
+int						is_special_char(char c);
 
-// Fonctions handling
+void					handle_exit_status(t_token *token, int exit_status,
+							t_token **next);
+
+void					handle_env_expansion(t_token *token, t_env *env,
+							t_token **next);
+
+void					merge_env_tokens(t_token *current, t_token *next,
+							t_env *env, int exit_status);
 int						handle_input(t_shell *shell, char *line);
 void					handle_word(t_token **tokens, t_token **last,
 							char **ptr);
-char					*get_quoted_string(char **ptr, t_env *env,
-							int exit_status);
-void					handle_argument(t_token **tokens, t_token **last,
-							char **ptr, t_env *env, int exit_status);
+char					*get_quoted_string(char **ptr, t_env *env);
+void					handle_argument(t_lexer_context *ctx);
 void					handle_env_var(t_token **tokens, t_token **last,
 							char **ptr);
+char					*handle_quoted_part(t_lexer_context *lexer,
+							char *argument);
 
 // Fonctions de tokenisation
 t_token					*lexer(char *input, t_env *env, int exit_status);
 t_token					*create_token(char *content, t_type type);
 void					add_token(t_token **tokens, t_token **last,
 							t_token *new_token);
-
 // Fonctions de parsing
 t_command				*parser(t_token *tokens);
 t_command				*create_command(void);
 void					add_arg_to_command(t_command *cmd, char *arg);
 void					add_command(t_command **cmds, t_command *new_cmd);
+int						process_token(t_parser_context *ctx);
+int						handle_pipe_sequence(t_parser_context *ctx);
+int						redirection(t_parser_context *ctx, t_type type);
+int						process_heredoc_delimiter(t_parser_context *ctx);
 
 // Libération de mémoire
 void					free_token(t_token *tokens);

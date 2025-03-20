@@ -6,11 +6,19 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:30:13 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/18 14:14:35 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 12:22:51 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void	init_lexer_context(t_lexer_context *ctx, t_token **tokens,
+			t_token **last, char **ptr)
+{
+	ctx->tokens = tokens;
+	ctx->last = last;
+	ctx->ptr = ptr;
+}
 
 // In lexer.c
 t_token *lexer(char *input, t_env *env, int exit_status)
@@ -18,6 +26,12 @@ t_token *lexer(char *input, t_env *env, int exit_status)
     t_token *tokens = NULL;
     t_token *last = NULL;
     char *ptr = input;
+    t_lexer_context ctx;
+    
+    init_lexer_context(&ctx, &tokens, &last, &ptr);
+    ctx.env = env;
+    ctx.exit_status = exit_status;
+    
     while (*ptr)
     {
         if (ft_isspace(*ptr))
@@ -53,7 +67,7 @@ t_token *lexer(char *input, t_env *env, int exit_status)
         else if (*ptr == '$')
             handle_env_var(&tokens, &last, &ptr);
         else
-            handle_argument(&tokens, &last, &ptr, env, exit_status);
+            handle_argument(&ctx);
     }
     return (tokens);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+         #
+#    By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/05 14:12:16 by ysaadaou          #+#    #+#              #
-#    Updated: 2025/03/19 22:57:58 by ilkaddou         ###   ########.fr        #
+#    Updated: 2025/03/20 14:15:10 by ilkaddou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ BUILTINS_FILES = ./builtins/ft_cd.c \
 PARSING_FILES = ./parsing/parsing.c \
 	./parsing/command_functions.c \
 	./parsing/env_functions.c \
+	./parsing/env_utils.c \
 	./parsing/lexer.c \
 	./parsing/handle_input.c \
 	./parsing/lexer_args.c \
@@ -40,7 +41,6 @@ EXEC_FILES = ./exec/cmd_exec.c \
 	./exec/pipeline_exec.c \
 	./exec/pipeline_utils.c \
 	./exec/redirection_utils.c \
-#	./exec/exec_functions.c
 
 SRCS = minishell.c \
 	minishell_init.c \
@@ -59,7 +59,7 @@ LIBFT_DIR = Libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra -g -g3
 
 # Détecter le système d'exploitation
 UNAME := $(shell uname)
