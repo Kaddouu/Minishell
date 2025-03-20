@@ -6,7 +6,7 @@
 /*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:28:36 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/11 11:55:40 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:23:34 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,35 @@ void	add_arg_to_command(t_command *cmd, char *arg)
 	cmd->args[i + 1] = NULL;
 }
 
+char	*process_variable(char **ptr, char *result, t_env *env)
+{
+	char	*start;
+	char	*var_name;
+	t_env	*env_var;
+	char	*temp;
+
+	(*ptr)++;
+	start = *ptr;
+	while (**ptr && (ft_isalnum(**ptr) || **ptr == '_'))
+		(*ptr)++;
+	var_name = ft_substr(start, 0, *ptr - start);
+	if (!var_name)
+		return (free(result), NULL);
+	env_var = find_env_var(env, var_name);
+	if (env_var)
+	{
+		temp = ft_strjoin_free(result, env_var->value);
+		if (!temp)
+			return (free(var_name), free(result), NULL);
+		result = temp;
+	}
+	return (free(var_name), result);
+}
+
 char	*expand_variables(char *str, t_env *env)
 {
 	char	*result;
 	char	*ptr;
-	char	*start;
-	char	*var_name;
-	t_env	*env_var;
 	char	*temp;
 
 	if (!str || !env)
@@ -91,39 +113,12 @@ char	*expand_variables(char *str, t_env *env)
 	{
 		if (*ptr == '$' && *(ptr + 1) && (ft_isalnum(*(ptr + 1)) || *(ptr
 					+ 1) == '_'))
-		{
-			ptr++;
-			start = ptr;
-			while (*ptr && (ft_isalnum(*ptr) || *ptr == '_'))
-				ptr++;
-			var_name = ft_substr(start, 0, ptr - start);
-			if (!var_name)
-			{
-				free(result);
-				return (NULL);
-			}
-			env_var = find_env_var(env, var_name);
-			if (env_var)
-			{
-				temp = ft_strjoin_free(result, env_var->value);
-				if (!temp)
-				{
-					free(var_name);
-					free(result);
-					return (NULL);
-				}
-				result = temp;
-			}
-			free(var_name);
-		}
+			result = process_variable(&ptr, result, env);
 		else
 		{
 			temp = ft_strjoin_char_free(result, *ptr);
 			if (!temp)
-			{
-				free(result);
-				return (NULL);
-			}
+				return (free(result), NULL);
 			result = temp;
 			ptr++;
 		}

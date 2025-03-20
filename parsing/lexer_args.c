@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:00:00 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/03/19 22:38:35 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:52:36 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ static char	*handle_quoted_part(char **ptr, t_env *env, int exit_status,
 	return (temp);
 }
 
-static char	*handle_dollar_var(char **ptr, t_env *env, int exit_status,
-					char *argument)
+static char	*handle_dollar_var(char **ptr, t_env *env,char *argument)
 {
 	char	*var_name;
 	char	*var_value;
@@ -58,17 +57,18 @@ static char	*handle_dollar_var(char **ptr, t_env *env, int exit_status,
 			var_name = ft_substr(var_start, 0, *ptr - var_start);
 		}
 		if (ft_strcmp(var_name, "?") == 0)
-			var_value = ft_itoa(exit_status);
+			var_value = ft_itoa(env->shell->exit_status);
 		else
 		{
 			t_env *var = find_env_var(env, var_name);
-			var_value = var ? ft_strdup(var->value) : ft_strdup("");
+			if (var)
+				var_value = ft_strdup(var->value);
+			else
+				var_value = ft_strdup("");
 		}
 		free(var_name);
 		temp = ft_strjoin(argument, var_value);
-		free(argument);
-		free(var_value);
-		return (temp);
+		return (free(argument), free(var_value), temp);
 	}
 	return (argument);
 }
@@ -103,7 +103,7 @@ void	handle_argument(t_token **tokens, t_token **last, char **ptr,
 			argument = handle_quoted_part(ptr, env, exit_status, argument);
 		else if (**ptr == '$' && (*(*ptr + 1) == '?' || ft_isalnum(*(*ptr + 1))
 				|| *(*ptr + 1) == '_'))
-			argument = handle_dollar_var(ptr, env, exit_status, argument);
+			argument = handle_dollar_var(ptr, env, argument);
 		else
 			argument = handle_normal_text(ptr, argument);
 		

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:29:13 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/19 22:47:37 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:24:25 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ static void	handle_env_expansion(t_token *token, t_env *env, t_token **next)
 	*next = next_token;
 }
 
-static void	merge_env_tokens(t_token *current, t_token *next,
-				t_env *env, int exit_status)
+static void	merge_env_tokens(t_token *current, t_token *next, t_env *env,
+		int exit_status)
 {
 	t_env	*var;
 	char	*temp;
@@ -78,7 +78,10 @@ static void	merge_env_tokens(t_token *current, t_token *next,
 	{
 		var = find_env_var(env, next->content);
 		free(next->content);
-		next->content = var ? ft_strdup(var->value) : ft_strdup("");
+		if (var)
+			next->content = ft_strdup(var->value);
+		else
+			next->content = ft_strdup("");
 	}
 	next->type = WORD;
 	temp = ft_strjoin(current->content, next->content);
@@ -103,7 +106,6 @@ void	expand_all_env_vars(t_token *tokens, t_env *env, int exit_status)
 				handle_exit_status(current, exit_status, &next);
 			else
 				handle_env_expansion(current, env, &next);
-			
 			while (next && next->type == ENV)
 			{
 				merge_env_tokens(current, next, env, exit_status);

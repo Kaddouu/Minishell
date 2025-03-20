@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:11:57 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/19 22:57:30 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:51:10 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define MINISHELL_H
 
 # include "./Libft/libft.h"
-# include "./parsing/parsing.h"
 # include "./builtins/builtins.h"
+# include "./parsing/parsing.h"
 # include <stdio.h>
 # include <errno.h>
 # include <fcntl.h>
@@ -56,7 +56,7 @@ void							handle_pipeline_command(t_shell *shell,
 									t_command *cmd, t_builtin *builtins,
 									t_exec_data *exec_data);
 int								count_commands(t_command *cmd);
-void    						setup_pipeline_fds(int prev_fd, int *pipe_fd,
+void							setup_pipeline_fds(int prev_fd, int *pipe_fd,
 									t_command *cmd);
 
 void							setup_pipe(int *pipe_fd, t_shell *shell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:00:00 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/03/19 22:38:08 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:29:22 by ilkaddou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	*get_var_value(char *var_name, t_env *env, int exit_status)
 }
 
 static char	*process_dollar_in_quotes(char **ptr, t_env *env, int exit_status,
-					char **start, char *content)
+		char **start, char *content)
 {
 	char	*var_name;
 	char	*var_value;
@@ -99,8 +99,8 @@ char	*get_quoted_string(char **ptr, t_env *env, int exit_status)
 	while (**ptr && **ptr != quote)
 	{
 		if (quote == '"' && **ptr == '$')
-			content = process_dollar_in_quotes(ptr, env, exit_status,
-					&start, content);
+			content = process_dollar_in_quotes(ptr, env, exit_status, &start,
+					content);
 		else
 			(*ptr)++;
 	}
