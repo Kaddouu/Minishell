@@ -6,7 +6,7 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 15:53:47 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/07 17:26:57 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:05:36 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,15 @@ char	*ft_strjoin_char_free(char *s, char c)
 	return (result);
 }
 
-char *ft_strjoin_three(char *s1, char *s2, char *s3)
+char	*ft_strjoin_three(char *s1, char *s2, char *s3)
 {
-    char *tmp;
-    char *result;
+	char	*tmp;
+	char	*result;
 
-    tmp = ft_strjoin(s1, s2);
-    if (!tmp)
-        return NULL;
-    result = ft_strjoin(tmp, s3);
-    free(tmp);
-    return result;
+	tmp = ft_strjoin(s1, s2);
+	if (!tmp)
+		return (NULL);
+	result = ft_strjoin(tmp, s3);
+	free(tmp);
+	return (result);
 }

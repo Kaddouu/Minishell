@@ -6,13 +6,13 @@
 /*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 15:18:53 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/15 15:49:19 by ysaadaou         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:08:18 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-volatile sig_atomic_t g_shell_state = 0;
+volatile sig_atomic_t	g_shell_state = 0;
 
 void	handle_sigint(int sig)
 {
