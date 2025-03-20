@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_init.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 19:17:11 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/11 11:47:33 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:31:50 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ t_shell	*init_shell(char **ev)
 		free(shell);
 		return (NULL);
 	}
+	shell->exit_status = 0;
 	shell->running = 1;
 	return (shell);
 }

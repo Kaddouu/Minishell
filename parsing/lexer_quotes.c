@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 12:00:00 by ilkaddou          #+#    #+#             */
-/*   Updated: 2025/03/20 15:13:08 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:59:28 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,16 @@ static char	*extract_var_name(char **ptr)
 	return (var_name);
 }
 
-static char	*get_var_value(char *var_name, t_env *env)
+static char	*get_var_value(char *var_name, t_lexer_context *lexer)
 {
-	t_env	*var;
 	char	*var_value;
+	t_env	*var;
 
 	if (ft_strcmp(var_name, "?") == 0)
-		var_value = ft_itoa(env->shell->exit_status);
+		var_value = ft_itoa(lexer->exit_status);
 	else
 	{
-		var = find_env_var(env, var_name);
+		var = find_env_var(lexer->env, var_name);
 		if (var)
 			var_value = ft_strdup(var->value);
 		else
@@ -50,7 +50,7 @@ static char	*get_var_value(char *var_name, t_env *env)
 	return (var_value);
 }
 
-static char	*process_dollar_in_quotes(char **ptr, t_env *env, char **start,
+static char	*process_dollar_in_quotes(char **ptr, t_lexer_context *lexer, char **start,
 		char *content)
 {
 	char	*var_name;
@@ -70,7 +70,7 @@ static char	*process_dollar_in_quotes(char **ptr, t_env *env, char **start,
 	if (**ptr == '?' || ft_isalnum(**ptr) || **ptr == '_')
 	{
 		var_name = extract_var_name(ptr);
-		var_value = get_var_value(var_name, env);
+		var_value = get_var_value(var_name, lexer);
 		free(var_name);
 		new_content = ft_strjoin(content, var_value);
 		free(content);
@@ -87,7 +87,7 @@ static char	*process_dollar_in_quotes(char **ptr, t_env *env, char **start,
 	return (content);
 }
 
-char	*get_quoted_string(char **ptr, t_env *env)
+char	*get_quoted_string(char **ptr, t_lexer_context *lexer)
 {
 	char	quote;
 	char	*start;
@@ -102,7 +102,7 @@ char	*get_quoted_string(char **ptr, t_env *env)
 	while (**ptr && **ptr != quote)
 	{
 		if (quote == '"' && **ptr == '$')
-			content = process_dollar_in_quotes(ptr, env, &start, content);
+			content = process_dollar_in_quotes(ptr, lexer, &start, content);
 		else
 			(*ptr)++;
 	}

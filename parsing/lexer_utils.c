@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ilkaddou <ilkaddou@42.fr>                  +#+  +:+       +#+        */
+/*   By: ysaadaou <ysaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 15:28:15 by ysaadaou          #+#    #+#             */
-/*   Updated: 2025/03/20 14:09:27 by ilkaddou         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:00:09 by ysaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*handle_quoted_part(t_lexer_context *lexer, char *argument)
 	char	*quoted;
 	char	*temp;
 
-	quoted = get_quoted_string(lexer->ptr, lexer->env);
+	quoted = get_quoted_string(lexer->ptr, lexer);
 	if (!quoted)
 	{
 		free(argument);
